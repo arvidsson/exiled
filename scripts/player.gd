@@ -16,6 +16,9 @@ func _process(_delta: float) -> void:
 	var target := get_global_mouse_position()
 	if (target - global_position).length_squared() > 0.0001:
 		gun.look_at(target)
+		gun.scale.y = -1.0 if target.x < global_position.x else 1.0
+	else:
+		gun.scale.y = 1.0
 
 
 func _physics_process(_delta: float) -> void:
