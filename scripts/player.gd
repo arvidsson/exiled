@@ -32,6 +32,10 @@ func _physics_process(_delta: float) -> void:
 	else:
 		_update_anim("idle", cur_dir)
 
+	# Player facing only (matches _update_anim "up" vs down/horizontal).
+	var facing_up: bool = abs(cur_dir.x) < abs(cur_dir.y) and cur_dir.y < 0
+	gun.z_index = -1 if facing_up else 1
+
 	if Input.is_action_just_pressed("shoot"):
 		_fire()
 
