@@ -8,4 +8,4 @@
 max_speed = 10.0
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=742758082]
-zoom = Vector2(5, 5)
+zoom = Vector2(2, 2)

@@ -7,3 +7,6 @@
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1296375718]
 position = Vector2(6, 0)
 texture = ExtResource("1_x77fm")
+
+[node name="Muzzle" type="Marker2D" parent="."]
+position = Vector2(16, 0)
