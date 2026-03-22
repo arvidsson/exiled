@@ -5,14 +5,22 @@ const BULLET_SCENE := preload("res://scenes/bullet.tscn")
 @export var max_speed: float
 @export var bullet_speed: float = 300.0
 @export var roll_speed_mult: float = 1.5
+@export var max_stamina: float = 100.0
+@export var stamina_regen_per_sec: float = 25.0
+@export var roll_stamina_cost: float = 35.0
 
 var cur_dir := Vector2.DOWN
 var _rolling := false
 var _roll_dir := Vector2.DOWN
+var current_stamina: float
 
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
 @onready var muzzle := $Gun/Muzzle
+
+
+func _ready() -> void:
+	current_stamina = max_stamina
 
 
 func _process(_delta: float) -> void:
@@ -26,13 +34,17 @@ func _process(_delta: float) -> void:
 		gun.scale.y = 1.0
 
 
-func _physics_process(_delta: float) -> void:
-	if Input.is_action_just_pressed("roll") and not _rolling:
+func _physics_process(delta: float) -> void:
+	if current_stamina < max_stamina:
+		current_stamina = minf(max_stamina, current_stamina + stamina_regen_per_sec * delta)
+
+	if Input.is_action_just_pressed("roll") and not _rolling and current_stamina >= roll_stamina_cost:
 		_start_roll()
 
 	if _rolling:
 		velocity = _roll_dir * max_speed * roll_speed_mult
 		move_and_slide()
+		_sync_stamina_bar()
 		return
 
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -52,8 +64,11 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("shoot"):
 		_fire()
 
+	_sync_stamina_bar()
+
 
 func _start_roll() -> void:
+	current_stamina = maxf(0.0, current_stamina - roll_stamina_cost)
 	var d := cur_dir
 	if d.length_squared() < 0.0001:
 		d = Vector2.DOWN
@@ -67,6 +82,14 @@ func _start_roll() -> void:
 func _on_roll_finished() -> void:
 	_rolling = false
 	gun.show()
+
+
+func _sync_stamina_bar() -> void:
+	if Refs.stamina_bar == null:
+		return
+	var bar: ProgressBar = Refs.stamina_bar
+	bar.max_value = max_stamina
+	bar.value = current_stamina
 
 
 func _fire() -> void:

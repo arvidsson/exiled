@@ -639,6 +639,7 @@ radius = 4.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1241231395 groups=["player"]]
 script = ExtResource("1_fjrip")
+max_speed = 50.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1597076928]
 position = Vector2(12, -10)

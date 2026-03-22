@@ -5,12 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://cdm33uoxgay1y" path="res://scenes/ui/xp_bar.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/enemy.tscn" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
-[ext_resource type="Script" path="res://scripts/level_area.gd" id="6_lvl"]
+[ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
+[ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
+script = ExtResource("7_main")
 
 [node name="Player" parent="." unique_id=1241231395 instance=ExtResource("1_o5qli")]
-max_speed = 50.0
+roll_speed_mult = 2.0
+stamina_regen_per_sec = 10.0
+roll_stamina_cost = 40.0
 
 [node name="FollowCamera" type="Node2D" parent="." unique_id=742758082 node_paths=PackedStringArray("target", "bounds_source")]
 script = ExtResource("5_fc")
