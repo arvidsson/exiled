@@ -59,15 +59,20 @@ func despawn(node: Node) -> void:
 		push_warning("Pool: trying to despawn an inactive node.")
 		return
 
+	_active.erase(node)
+
 	if node.has_method(&"on_despawn"):
 		node.on_despawn()
 
+	# body_entered and other physics signals run while queries flush; reparenting
+	# CollisionObject2D or toggling Area2D monitoring must happen after that.
+	call_deferred(&"_finish_despawn", node)
+
+func _finish_despawn(node: Node) -> void:
 	var par := node.get_parent()
 	if par != null:
 		par.remove_child(node)
-
 	_set_active(node, false)
-	_active.erase(node)
 	add_child(node)
 	_available.append(node)
 
