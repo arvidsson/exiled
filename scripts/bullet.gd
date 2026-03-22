@@ -45,5 +45,12 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if body.is_in_group(&"enemy") and body.has_method(&"take_hit"):
 		_spent = true
+		# body_entered runs while physics queries flush; reparenting/spawning
+		# CollisionObject2D (e.g. XP orb Area2D) must happen after that.
+		call_deferred(&"_apply_hit", body)
+
+
+func _apply_hit(body: Node2D) -> void:
+	if is_instance_valid(body) and body.is_in_group(&"enemy") and body.has_method(&"take_hit"):
 		body.take_hit()
-		Refs.bullet_pool.despawn(self )
+	Refs.bullet_pool.despawn(self)
