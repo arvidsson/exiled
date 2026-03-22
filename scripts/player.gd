@@ -6,8 +6,10 @@ extends CharacterBody2D
 @export var max_stamina: float = 100.0
 @export var stamina_regen_per_sec: float = 25.0
 @export var roll_stamina_cost: float = 35.0
+@export var max_hp: int = 2
 
 var cur_dir := Vector2.DOWN
+var current_hp: int
 var _rolling := false
 var _roll_dir := Vector2.DOWN
 var current_stamina: float
@@ -18,6 +20,18 @@ var current_stamina: float
 
 func _ready() -> void:
 	current_stamina = max_stamina
+	current_hp = max_hp
+
+
+func take_damage(amount: int) -> void:
+	current_hp -= amount
+	var par := get_parent()
+	if par != null:
+		var fc: Node = par.get_node_or_null("FollowCamera")
+		if fc != null and fc.has_method(&"add_shake"):
+			fc.call(&"add_shake", 6.0)
+	if current_hp <= 0:
+		get_tree().reload_current_scene()
 
 func _process(_delta: float) -> void:
 	if _rolling:

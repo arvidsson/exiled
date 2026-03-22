@@ -87,8 +87,13 @@ func _create_instance() -> Node:
 func _set_active(node: Node, active: bool) -> void:
 	if node is CanvasItem:
 		(node as CanvasItem).visible = active
-	if node is CollisionObject2D:
-		var co := node as CollisionObject2D
-		co.monitoring = active
-		co.monitorable = active
+	if node is Area2D:
+		var area := node as Area2D
+		area.monitoring = active
+		area.monitorable = active
+	elif not active and node is CharacterBody2D:
+		# Pooled bodies still collide unless layers are cleared; on_spawn must restore.
+		var body := node as CharacterBody2D
+		body.collision_layer = 0
+		body.collision_mask = 0
 	node.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED

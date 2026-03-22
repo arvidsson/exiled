@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
 [ext_resource type="Script" uid="uid://bo1reapum7w1c" path="res://scripts/pool.gd" id="8_pool"]
 [ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="8_tipki"]
+[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/enemy.tscn" id="9_enemy"]
+[ext_resource type="Script" uid="uid://dw8wo2ong6uwo" path="res://scripts/enemy_spawner.gd" id="10_spawn"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
 script = ExtResource("7_main")
@@ -30,6 +32,9 @@ bounds_source = NodePath("../Level")
 
 [node name="XPBar" parent="UI" unique_id=1431045425 instance=ExtResource("3_sugp2")]
 
+[node name="EnemySpawner" type="Node" parent="." unique_id=2077478281]
+script = ExtResource("10_spawn")
+
 [node name="Level" type="Node2D" parent="." unique_id=926282365]
 script = ExtResource("6_lvl")
 
@@ -46,3 +51,9 @@ script = ExtResource("8_pool")
 template = ExtResource("8_tipki")
 spawn_parent = NodePath("../../Level/BulletContainer")
 prewarm_on_ready = 24
+
+[node name="EnemyPool" type="Node" parent="Pools" unique_id=2077478282 node_paths=PackedStringArray("spawn_parent")]
+script = ExtResource("8_pool")
+template = ExtResource("9_enemy")
+spawn_parent = NodePath("../../Level/EnemyContainer")
+prewarm_on_ready = 12
