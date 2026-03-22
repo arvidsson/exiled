@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4wl278mg4npe"]
 
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_enemy_script"]
 [ext_resource type="Texture2D" uid="uid://c30uooim0ko8e" path="res://sprites/enemy/warrior.png" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://cjpd7rw6rnp6w" path="res://scripts/enemy.gd" id="1_enemy_script"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8qclf"]
 atlas = ExtResource("1_7p1mj")
@@ -111,7 +111,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -185,12 +185,14 @@ radius = 8.0
 
 [node name="Enemy" type="CharacterBody2D" unique_id=954850513 groups=["enemy"]]
 collision_layer = 4
-collision_mask = 1
 script = ExtResource("1_enemy_script")
+speed = 60.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1362614468]
+position = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_8tegq")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1042489938]
+position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_8tegq")
