@@ -1,7 +1,7 @@
 extends Node
-class_name ObjectPool
+class_name Pool
 
-const META_OWNER := &"_object_pool_owner"
+const META_OWNER := &"_pool_owner"
 
 ## The scene to use for new instances.
 @export var template: PackedScene
@@ -48,10 +48,10 @@ func despawn(node: Node) -> void:
 	if not is_instance_valid(node):
 		return
 	if node.get_meta(META_OWNER, null) != self:
-		push_warning("ObjectPool.despawn: node does not belong to this pool.")
+		push_warning("Pool.despawn: node does not belong to this pool.")
 		return
 	if not _active.has(node):
-		push_warning("ObjectPool: trying to despawn an inactive node.")
+		push_warning("Pool: trying to despawn an inactive node.")
 		return
 
 	if node.has_method(&"on_despawn"):
@@ -73,7 +73,7 @@ func active_count() -> int:
 	return _active.size()
 
 func _create_instance() -> Node:
-	assert(template != null, "ObjectPool requires a template scene.")
+	assert(template != null, "Pool requires a template scene.")
 	var node := template.instantiate() as Node
 	node.set_meta(META_OWNER, self )
 	_set_active(node, false)
