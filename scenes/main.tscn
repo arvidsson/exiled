@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://ceeyji2dtai2y"]
 
 [ext_resource type="PackedScene" uid="uid://di0ys06d7ggkp" path="res://scenes/player.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://b53dj4ns7smsg" path="res://scenes/stamina_bar.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://cdm33uoxgay1y" path="res://scenes/xp_bar.tscn" id="3_sugp2"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
 
@@ -8,4 +10,9 @@
 max_speed = 10.0
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=742758082]
-zoom = Vector2(2, 2)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=631672413]
+
+[node name="StaminaBar" parent="UI" unique_id=838798883 instance=ExtResource("2_0wfyh")]
+
+[node name="XPBar" parent="UI" unique_id=1431045425 instance=ExtResource("3_sugp2")]

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b53dj4ns7smsg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4bek3"]
+bg_color = Color(0.05882353, 0.16470589, 0.16470589, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lcti6"]
+bg_color = Color(0.101960786, 0.6392157, 0.6039216, 1)
+
+[node name="StaminaBar" type="ProgressBar" unique_id=838798883]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("StyleBoxFlat_4bek3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lcti6")
+value = 50.0
