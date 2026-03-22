@@ -3,6 +3,7 @@ class_name Tools
 static func instantiate_at_position(scene: PackedScene, parent: Node, pos: Vector3) -> Node:
 	var instance = scene.instantiate()
 	parent.add_child(instance)
+	instance.global_position = pos
 	return instance
 
 static func start_progress_timer(time: float, callback: Callable) -> ProgressTimer:
