@@ -1,1 +1,3 @@
+- xp drops
 - shadows under entities
+- sounds

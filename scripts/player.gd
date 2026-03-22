@@ -8,11 +8,15 @@ extends CharacterBody2D
 @export var roll_stamina_cost: float = 35.0
 @export var max_hp: int = 2
 
+const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
+const HURT_FLASH_DURATION := 0.12
+
 var cur_dir := Vector2.DOWN
 var current_hp: int
 var _rolling := false
 var _roll_dir := Vector2.DOWN
 var current_stamina: float
+var _hurt_tween: Tween
 
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
@@ -25,6 +29,7 @@ func _ready() -> void:
 
 func take_damage(amount: int) -> void:
 	current_hp -= amount
+	_play_hurt_flash()
 	var par := get_parent()
 	if par != null:
 		var fc: Node = par.get_node_or_null("FollowCamera")
@@ -32,6 +37,16 @@ func take_damage(amount: int) -> void:
 			fc.call(&"add_shake", 6.0)
 	if current_hp <= 0:
 		get_tree().reload_current_scene()
+
+
+func _play_hurt_flash() -> void:
+	if _hurt_tween != null:
+		_hurt_tween.kill()
+	_hurt_tween = create_tween()
+	_hurt_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	sprite.modulate = HURT_FLASH_PEAK
+	_hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
+
 
 func _process(_delta: float) -> void:
 	if _rolling:
