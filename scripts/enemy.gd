@@ -80,6 +80,8 @@ func take_hit() -> void:
 	_dying = true
 	_attacking = false
 	velocity = Vector2.ZERO
+	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
+	collision_layer = 0
 	if sprite.animation_finished.is_connected(_on_attack_anim_finished):
 		sprite.animation_finished.disconnect(_on_attack_anim_finished)
 	sprite.play(&"die")
