@@ -3,6 +3,7 @@ extends CharacterBody2D
 @export var speed: float = 40.0
 @export var attack_range: float = 32.0
 @export var attack_cooldown: float = 1.2
+@export var xp_reward: int = 10
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -82,6 +83,10 @@ func take_hit() -> void:
 	velocity = Vector2.ZERO
 	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
 	collision_layer = 0
+	if Refs.xp_pool != null:
+		var orb: Node = Refs.xp_pool.spawn(null, global_position)
+		if orb != null and orb.has_method(&"setup"):
+			orb.setup(xp_reward)
 	if sprite.animation_finished.is_connected(_on_attack_anim_finished):
 		sprite.animation_finished.disconnect(_on_attack_anim_finished)
 	sprite.play(&"die")

@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var stamina_regen_per_sec: float = 25.0
 @export var roll_stamina_cost: float = 35.0
 @export var max_hp: int = 2
+@export var xp_per_level: float = 100.0
 
 const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
@@ -16,6 +17,8 @@ var current_hp: int
 var _rolling := false
 var _roll_dir := Vector2.DOWN
 var current_stamina: float
+var current_xp: float = 0.0
+var player_level: int = 1
 var _hurt_tween: Tween
 
 @onready var sprite := $AnimatedSprite2D
@@ -25,6 +28,15 @@ var _hurt_tween: Tween
 func _ready() -> void:
 	current_stamina = max_stamina
 	current_hp = max_hp
+	call_deferred(&"_sync_xp_bar")
+
+
+func add_xp(amount: int) -> void:
+	current_xp += amount
+	while current_xp >= xp_per_level:
+		current_xp -= xp_per_level
+		player_level += 1
+	_sync_xp_bar()
 
 
 func take_damage(amount: int) -> void:
@@ -111,6 +123,14 @@ func _sync_stamina_bar() -> void:
 	var bar: ProgressBar = Refs.stamina_bar
 	bar.max_value = max_stamina
 	bar.value = current_stamina
+
+
+func _sync_xp_bar() -> void:
+	if Refs.xp_bar == null:
+		return
+	var bar: ProgressBar = Refs.xp_bar
+	bar.max_value = xp_per_level
+	bar.value = current_xp
 
 func _fire() -> void:
 	var bullet := Refs.bullet_pool.spawn(null, muzzle.global_position) as Area2D

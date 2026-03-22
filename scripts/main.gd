@@ -7,3 +7,4 @@ func _ready() -> void:
 	Refs.xp_bar = $UI/XPBar
 	Refs.bullet_pool = $Pools/BulletPool
 	Refs.enemy_pool = $Pools/EnemyPool
+	Refs.xp_pool = $Pools/XpPool

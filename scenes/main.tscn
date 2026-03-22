@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="8_tipki"]
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/enemy.tscn" id="9_enemy"]
 [ext_resource type="Script" uid="uid://dw8wo2ong6uwo" path="res://scripts/enemy_spawner.gd" id="10_spawn"]
+[ext_resource type="PackedScene" path="res://scenes/xp_pickup.tscn" id="11_xp"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
 script = ExtResource("7_main")
@@ -44,6 +45,8 @@ script = ExtResource("6_lvl")
 
 [node name="BulletContainer" type="Node2D" parent="Level" unique_id=223493477]
 
+[node name="XpContainer" type="Node2D" parent="Level" unique_id=223493478]
+
 [node name="Pools" type="Node" parent="." unique_id=692932801]
 
 [node name="BulletPool" type="Node" parent="Pools" unique_id=-1475494275 node_paths=PackedStringArray("spawn_parent")]
@@ -57,3 +60,9 @@ script = ExtResource("8_pool")
 template = ExtResource("9_enemy")
 spawn_parent = NodePath("../../Level/EnemyContainer")
 prewarm_on_ready = 12
+
+[node name="XpPool" type="Node" parent="Pools" unique_id=2077478283 node_paths=PackedStringArray("spawn_parent")]
+script = ExtResource("8_pool")
+template = ExtResource("11_xp")
+spawn_parent = NodePath("../../Level/XpContainer")
+prewarm_on_ready = 28
