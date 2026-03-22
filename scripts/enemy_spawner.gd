@@ -1,52 +1,83 @@
 extends Node
 
-@export var spawn_interval: float = 1.5
-@export var viewport_margin: float = 72.0
-@export var max_spawn_attempts: int = 24
+## Seconds from start until x and y reach their end values.
+@export var ramp_duration_sec: float = 120.0
+## Seconds between each individual spawn within a wave. Decreases over the ramp (y).
+@export var spawn_interval_start: float = 2.2
+@export var spawn_interval_end: float = 0.35
+## Enemies per wave before the next wave starts. Increases over the ramp (x).
+@export var enemies_per_wave_start: int = 1
+@export var enemies_per_wave_end: int = 6
+## Ring sits just outside the visible viewport (world units past the view diagonal).
+@export var ring_margin: float = 40.0
+## Keep spawn points inside the level rectangle.
+@export var clamp_to_level: bool = true
+
+const _MIN_INTERVAL := 0.08
+
+var _elapsed: float = 0.0
+var _spawn_accum: float = 0.0
+var _left_in_wave: int = 0
 
 
-func _ready() -> void:
-	var timer := Timer.new()
-	timer.wait_time = spawn_interval
-	timer.timeout.connect(_try_spawn_enemy)
-	timer.autostart = true
-	add_child(timer)
-
-
-func _try_spawn_enemy() -> void:
+func _process(delta: float) -> void:
 	if Refs.enemy_pool == null or Refs.level_container == null:
 		return
 	var cam := get_viewport().get_camera_2d()
 	if cam == null:
 		return
-	var lr: Rect2 = Refs.level_container.level_rect
+	var player := _get_player()
+	if player == null:
+		return
+
+	_elapsed += delta
+	_spawn_accum += delta
+
+	var interval := _spawn_interval()
+	while _spawn_accum >= interval:
+		_spawn_accum -= interval
+		if _left_in_wave <= 0:
+			_left_in_wave = _enemies_per_wave()
+		_spawn_one_on_ring(player.global_position, cam)
+		_left_in_wave -= 1
+
+
+func _ramp_t() -> float:
+	if ramp_duration_sec <= 0.0:
+		return 1.0
+	return clampf(_elapsed / ramp_duration_sec, 0.0, 1.0)
+
+
+func _spawn_interval() -> float:
+	var t := _ramp_t()
+	return maxf(_MIN_INTERVAL, lerpf(spawn_interval_start, spawn_interval_end, t))
+
+
+func _enemies_per_wave() -> int:
+	var t := _ramp_t()
+	var a := float(enemies_per_wave_start)
+	var b := float(enemies_per_wave_end)
+	return int(round(lerpf(a, b, t)))
+
+
+func _get_player() -> Node2D:
+	for n in get_tree().get_nodes_in_group(&"player"):
+		if n is Node2D:
+			return n as Node2D
+	return null
+
+
+func _ring_radius(cam: Camera2D) -> float:
 	var half := get_viewport().get_visible_rect().size / (2.0 * cam.zoom)
-	var center := cam.get_screen_center_position()
-	var avoid := Rect2(center - half, half * 2.0).grow(viewport_margin)
-	var pos := _pick_spawn_point(lr, avoid)
-	if pos.x > -1e9:
-		Refs.enemy_pool.spawn(null, pos)
+	return half.length() + ring_margin
 
 
-func _pick_spawn_point(lr: Rect2, avoid: Rect2) -> Vector2:
-	for i in max_spawn_attempts:
-		var p := Vector2(
-			randf_range(lr.position.x, lr.end.x),
-			randf_range(lr.position.y, lr.end.y)
-		)
-		if not avoid.has_point(p):
-			return p
-	var corners := [
-		lr.position,
-		Vector2(lr.end.x, lr.position.y),
-		lr.end,
-		Vector2(lr.position.x, lr.end.y)
-	]
-	var best: Vector2 = corners[0]
-	var best_d := -1.0
-	for c in corners:
-		var d := avoid.get_center().distance_squared_to(c)
-		if d > best_d:
-			best_d = d
-			best = c
-	return best
+func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
+	var angle := randf() * TAU
+	var r := _ring_radius(cam)
+	var pos := center + Vector2.from_angle(angle) * r
+	if clamp_to_level:
+		var lr: Rect2 = Refs.level_container.level_rect
+		pos.x = clampf(pos.x, lr.position.x, lr.end.x)
+		pos.y = clampf(pos.y, lr.position.y, lr.end.y)
+	Refs.enemy_pool.spawn(null, pos)
