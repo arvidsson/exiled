@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
 [ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
+[ext_resource type="Script" uid="uid://bo1reapum7w1c" path="res://scripts/pool.gd" id="8_pool"]
+[ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="8_tipki"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
 script = ExtResource("7_main")
@@ -34,3 +36,13 @@ script = ExtResource("6_lvl")
 [node name="GrassContainer" type="Node2D" parent="Level" unique_id=1837462001]
 
 [node name="EnemyContainer" type="Node2D" parent="Level" unique_id=2077478280]
+
+[node name="BulletContainer" type="Node2D" parent="Level" unique_id=223493477]
+
+[node name="Pools" type="Node" parent="." unique_id=692932801]
+
+[node name="BulletPool" type="Node" parent="Pools" unique_id=-1475494275 node_paths=PackedStringArray("spawn_parent")]
+script = ExtResource("8_pool")
+template = ExtResource("8_tipki")
+spawn_parent = NodePath("../../Level/BulletContainer")
+prewarm_on_ready = 24

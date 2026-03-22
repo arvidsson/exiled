@@ -1,4 +1,5 @@
 class_name Tools
+extends Node
 
 static func instantiate_at_position(scene: PackedScene, parent: Node, pos: Vector3) -> Node:
 	var instance = scene.instantiate()

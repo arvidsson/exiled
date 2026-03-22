@@ -5,18 +5,14 @@ extends Area2D
 
 var velocity := Vector2.ZERO
 
-
-func _ready() -> void:
-	get_tree().create_timer(lifetime).timeout.connect(_on_lifetime_ended)
-
+func on_spawn() -> void:
+	Tools.call_delay(self , lifetime, Callable(self , "_on_lifetime_ended"))
 
 func _on_lifetime_ended() -> void:
-	queue_free()
-
+	Refs.bullet_pool.despawn(self)
 
 func setup(direction: Vector2, move_speed: float) -> void:
 	velocity = direction.normalized() * move_speed
-
 
 func _physics_process(delta: float) -> void:
 	global_position += velocity * delta

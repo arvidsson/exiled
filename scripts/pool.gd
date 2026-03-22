@@ -12,6 +12,7 @@ const META_OWNER := &"_pool_owner"
 
 var _available: Array[Node] = []
 var _active := {}
+var _spawn_count: int = 0
 
 func _ready() -> void:
 	if prewarm_on_ready > 0:
@@ -20,6 +21,8 @@ func _ready() -> void:
 func prewarm(count: int) -> void:
 	for i in range(count):
 		var node := _create_instance()
+		_spawn_count += 1
+		node.name = "%s_%d" % [node.name, _spawn_count]
 		add_child(node)
 		_available.append(node)
 
@@ -28,6 +31,8 @@ func spawn(parent: Node = null, position: Vector2 = Vector2.ZERO) -> Node:
 	var node: Node
 	if _available.is_empty():
 		node = _create_instance()
+		_spawn_count += 1
+		node.name = "%s_%d" % [node.name, _spawn_count]
 	else:
 		node = _available.pop_back()
 		if node.get_parent() == self:

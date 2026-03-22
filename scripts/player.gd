@@ -1,7 +1,5 @@
 extends CharacterBody2D
 
-const BULLET_SCENE := preload("res://scenes/bullet.tscn")
-
 @export var max_speed: float
 @export var bullet_speed: float = 300.0
 @export var roll_speed_mult: float = 1.5
@@ -18,10 +16,8 @@ var current_stamina: float
 @onready var gun := $Gun
 @onready var muzzle := $Gun/Muzzle
 
-
 func _ready() -> void:
 	current_stamina = max_stamina
-
 
 func _process(_delta: float) -> void:
 	if _rolling:
@@ -32,7 +28,6 @@ func _process(_delta: float) -> void:
 		gun.scale.y = -1.0 if target.x < global_position.x else 1.0
 	else:
 		gun.scale.y = 1.0
-
 
 func _physics_process(delta: float) -> void:
 	if current_stamina < max_stamina:
@@ -66,7 +61,6 @@ func _physics_process(delta: float) -> void:
 
 	_sync_stamina_bar()
 
-
 func _start_roll() -> void:
 	current_stamina = maxf(0.0, current_stamina - roll_stamina_cost)
 	var d := cur_dir
@@ -78,11 +72,9 @@ func _start_roll() -> void:
 	_play_roll_anim(_roll_dir)
 	sprite.animation_finished.connect(_on_roll_finished, CONNECT_ONE_SHOT)
 
-
 func _on_roll_finished() -> void:
 	_rolling = false
 	gun.show()
-
 
 func _sync_stamina_bar() -> void:
 	if Refs.stamina_bar == null:
@@ -91,13 +83,9 @@ func _sync_stamina_bar() -> void:
 	bar.max_value = max_stamina
 	bar.value = current_stamina
 
-
 func _fire() -> void:
-	var bullet: Area2D = BULLET_SCENE.instantiate()
+	var bullet := Refs.bullet_pool.spawn(null, muzzle.global_position) as Area2D
 	bullet.setup(muzzle.global_transform.x, bullet_speed)
-	bullet.global_position = muzzle.global_position
-	get_parent().add_child(bullet)
-
 
 func _play_roll_anim(dir: Vector2) -> void:
 	var anim: String
@@ -110,7 +98,6 @@ func _play_roll_anim(dir: Vector2) -> void:
 		sprite.flip_h = dir.x < 0
 		sprite.offset.x = -24 if dir.x < 0 else 0
 	sprite.play(anim)
-
 
 func _update_anim(state: String, dir: Vector2) -> void:
 	var anim := ""
