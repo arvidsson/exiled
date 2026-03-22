@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://di0ys06d7ggkp" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://b53dj4ns7smsg" path="res://scenes/ui/stamina_bar.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cdm33uoxgay1y" path="res://scenes/ui/xp_bar.tscn" id="3_sugp2"]
-[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/enemy.tscn" id="4_jyhfs"]
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
 [ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
@@ -35,6 +34,3 @@ script = ExtResource("6_lvl")
 [node name="GrassContainer" type="Node2D" parent="Level" unique_id=1837462001]
 
 [node name="EnemyContainer" type="Node2D" parent="Level" unique_id=2077478280]
-
-[node name="Enemy" parent="Level/EnemyContainer" unique_id=954850513 instance=ExtResource("4_jyhfs")]
-position = Vector2(101, 89)
