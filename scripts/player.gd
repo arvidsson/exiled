@@ -149,32 +149,16 @@ func _on_roll_finished() -> void:
 	gun.show()
 
 func _sync_stamina_bar() -> void:
-	if Refs.stamina_bar == null:
-		return
-	var bar: ProgressBar = Refs.stamina_bar
-	bar.max_value = max_stamina
-	bar.value = current_stamina
-
+	Events.stamina_changed.emit(current_stamina, max_stamina)
 
 func _sync_xp_bar() -> void:
-	if Refs.xp_bar == null:
-		return
-	var bar: ProgressBar = Refs.xp_bar
-	bar.max_value = xp_per_level
-	bar.value = current_xp
-
+	Events.xp_changed.emit(current_xp, xp_per_level)
 
 func _sync_hp_label() -> void:
-	if Refs.hp_label == null:
-		return
-	Refs.hp_label.text = "hp %d / %d" % [current_hp, max_hp]
-
+	Events.hp_changed.emit(current_hp, max_hp)
 
 func _sync_ammo_label() -> void:
-	if Refs.ammo_label == null:
-		return
-	Refs.ammo_label.text = "ammo %d / %d" % [ammo, magazine_size]
-
+	Events.ammo_changed.emit(ammo, magazine_size)
 
 func _start_reload() -> void:
 	if _reloading or ammo >= magazine_size:
@@ -182,11 +166,10 @@ func _start_reload() -> void:
 	_reloading = true
 	_reload_remaining = reload_duration_sec
 
-
 func _fire() -> void:
 	var bullet := Pools.spawn("bullet", muzzle.global_position) as Area2D
 	bullet.setup(muzzle.global_transform.x, bullet_speed)
-	SoundManager.play_sfx(Prefabs.shoot_snd)
+	SoundManager.play_sfx(Data.get_sound("shoot"))
 
 func _play_roll_anim(dir: Vector2) -> void:
 	var anim: String

@@ -1,27 +1,18 @@
 extends Node
 
-# =========================
-# CONFIG
-# =========================
 @export var sfx_pool_size: int = 10
 @export var bus_sfx := "SFX"
 @export var bus_music := "Music"
 
-# =========================
-# INTERNAL
-# =========================
 var _sfx_players: Array[AudioStreamPlayer] = []
 var _music_player: AudioStreamPlayer
 var _rng := RandomNumberGenerator.new()
 
-# =========================
-# READY
-# =========================
 func _ready():
 	_rng.randomize()
 
 	# Create SFX pool
-	for i in sfx_pool_size:
+	for i in range(sfx_pool_size):
 		var p := AudioStreamPlayer.new()
 		p.bus = bus_sfx
 		add_child(p)
@@ -32,9 +23,6 @@ func _ready():
 	_music_player.bus = bus_music
 	add_child(_music_player)
 
-# =========================
-# SFX
-# =========================
 func play_sfx(
 	stream: AudioStream,
 	volume_db: float = 0.0,
@@ -61,9 +49,6 @@ func play_sfx_random(streams: Array):
 
 	play_sfx(streams[_rng.randi_range(0, streams.size() - 1)])
 
-# =========================
-# MUSIC
-# =========================
 func play_music(stream: AudioStream, volume_db: float = 0.0):
 	if _music_player.stream == stream and _music_player.playing:
 		return
@@ -80,18 +65,12 @@ func fade_out_music(duration: float = 1.0):
 	tween.tween_property(_music_player, "volume_db", -80, duration)
 	tween.tween_callback(_music_player.stop)
 
-# =========================
-# VOLUME CONTROL
-# =========================
 func set_sfx_volume(db: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus_sfx), db)
 
 func set_music_volume(db: float):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index(bus_music), db)
 
-# =========================
-# INTERNAL HELPERS
-# =========================
 func _get_free_player() -> AudioStreamPlayer:
 	for p in _sfx_players:
 		if not p.playing:
