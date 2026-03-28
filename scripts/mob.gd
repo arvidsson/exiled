@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Mob
 
 @export var speed: float = 40.0
 @export var attack_range: float = 32.0
@@ -112,7 +113,7 @@ func _on_spawn() -> void:
 		spr.animation_finished.disconnect(_on_die_anim_finished)
 
 
-func on_despawn() -> void:
+func _on_despawn() -> void:
 	velocity = Vector2.ZERO
 	var spr := $AnimatedSprite2D as AnimatedSprite2D
 	if spr.animation_finished.is_connected(_on_attack_anim_finished):
