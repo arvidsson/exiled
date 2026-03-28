@@ -93,13 +93,10 @@ func take_hit() -> void:
 		sprite.animation_finished.disconnect(_on_die_anim_finished)
 	sprite.animation_finished.connect(_on_die_anim_finished, CONNECT_ONE_SHOT)
 
-
 func _on_die_anim_finished() -> void:
-	if Refs.enemy_pool != null:
-		Refs.enemy_pool.despawn(self)
+	Pools.despawn(self)
 
-
-func on_spawn() -> void:
+func _on_spawn() -> void:
 	_dying = false
 	_attacking = false
 	_attack_cd_remaining = 0.0

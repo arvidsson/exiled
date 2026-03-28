@@ -11,12 +11,12 @@ func _ready() -> void:
 	if not body_entered.is_connected(_on_body_entered):
 		body_entered.connect(_on_body_entered)
 
-func on_spawn() -> void:
+func _on_spawn() -> void:
 	_cancel_lifetime_delay()
 	_spent = false
 	_lifetime_delay = Tools.call_delay(self , lifetime, _on_lifetime_ended)
 
-func on_despawn() -> void:
+func _on_despawn() -> void:
 	_cancel_lifetime_delay()
 
 func _cancel_lifetime_delay() -> void:
@@ -31,7 +31,7 @@ func _on_lifetime_ended() -> void:
 	if _spent:
 		return
 	_spent = true
-	Refs.bullet_pool.despawn(self )
+	Pools.despawn(self)
 
 func setup(direction: Vector2, move_speed: float) -> void:
 	velocity = direction.normalized() * move_speed
@@ -53,4 +53,4 @@ func _on_body_entered(body: Node2D) -> void:
 func _apply_hit(body: Node2D) -> void:
 	if is_instance_valid(body) and body.is_in_group(&"enemy") and body.has_method(&"take_hit"):
 		body.take_hit()
-	Refs.bullet_pool.despawn(self)
+	Pools.despawn(self)

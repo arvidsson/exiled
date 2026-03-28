@@ -7,8 +7,8 @@ func _ready() -> void:
 	Refs.xp_bar = $UI/XPBar
 	Refs.hp_label = $UI/HpLabel
 	Refs.ammo_label = $UI/AmmoLabel
-	Refs.bullet_pool = $Pools/BulletPool
-	Refs.enemy_pool = $Pools/EnemyPool
+	Pools.register(Data.get_mob_data("lizard").scene, $Level/MobContainer)
+	Pools.register(Data.get_scene("bullet"), $Level/BulletContainer)
 	Pools.register(Data.get_scene("xp_pickup"), $Level/XpContainer)
 	SoundManager.play_music(Prefabs.music, -20)
 

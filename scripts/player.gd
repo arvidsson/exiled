@@ -184,7 +184,7 @@ func _start_reload() -> void:
 
 
 func _fire() -> void:
-	var bullet := Refs.bullet_pool.spawn(null, muzzle.global_position) as Area2D
+	var bullet := Pools.spawn("bullet", muzzle.global_position) as Area2D
 	bullet.setup(muzzle.global_transform.x, bullet_speed)
 	SoundManager.play_sfx(Prefabs.shoot_snd)
 

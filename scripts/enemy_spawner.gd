@@ -21,8 +21,6 @@ var _left_in_wave: int = 0
 
 
 func _process(delta: float) -> void:
-	if Refs.enemy_pool == null or Refs.level_container == null:
-		return
 	var cam := get_viewport().get_camera_2d()
 	if cam == null:
 		return
@@ -80,4 +78,4 @@ func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
 		var lr: Rect2 = Refs.level_container.level_rect
 		pos.x = clampf(pos.x, lr.position.x, lr.end.x)
 		pos.y = clampf(pos.y, lr.position.y, lr.end.y)
-	Refs.enemy_pool.spawn(null, pos)
+	Pools.spawn(Data.get_mob_data("lizard").scene.resource_path.get_file().get_basename(), pos)
