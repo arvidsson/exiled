@@ -17,9 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Refs="*res://scripts/refs.gd"
-Prefabs="*uid://duhaupdcm8qro"
-SoundManager="*uid://djrqad16nm4sj"
+Audio="*uid://djrqad16nm4sj"
 Events="*uid://b7skhmlwluo8i"
 Data="*uid://bbmor7s6vn267"
 Pools="*uid://jb7yi30s6g70"

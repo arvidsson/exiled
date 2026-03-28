@@ -2,12 +2,11 @@ extends Node2D
 
 
 func _ready() -> void:
-	Refs.level_container = $Level
 	# TODO: rethink this?
 	Pools.register(Data.get_mob_data("lizard").scene, $Level/MobContainer)
 	Pools.register(Data.get_scene("bullet"), $Level/BulletContainer)
 	Pools.register(Data.get_scene("xp_pickup"), $Level/XpContainer)
-	SoundManager.play_music(Data.get_music("music"), -20)
+	Audio.play_music(Data.get_music("music"), -20)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):

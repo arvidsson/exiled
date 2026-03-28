@@ -81,7 +81,7 @@ func take_hit() -> void:
 	_dying = true
 	_attacking = false
 	velocity = Vector2.ZERO
-	SoundManager.play_sfx(Data.get_sound("hurt"))
+	Audio.play_sfx(Data.get_sound("hurt"))
 	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
 	collision_layer = 0
 	var xp_orb = Pools.spawn("xp_pickup", global_position) as XPPickup

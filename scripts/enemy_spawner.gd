@@ -75,7 +75,7 @@ func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
 	var r := _ring_radius(cam)
 	var pos := center + Vector2.from_angle(angle) * r
 	if clamp_to_level:
-		var lr: Rect2 = Refs.level_container.level_rect
+		var lr: Rect2 = $"../Level".level_rect
 		pos.x = clampf(pos.x, lr.position.x, lr.end.x)
 		pos.y = clampf(pos.y, lr.position.y, lr.end.y)
 	Pools.spawn(Data.get_mob_data("lizard").scene.resource_path.get_file().get_basename(), pos)

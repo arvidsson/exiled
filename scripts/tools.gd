@@ -11,7 +11,6 @@ static func instantiate_at_position(scene: PackedScene, parent: Node, pos: Vecto
 # Creates a progress timer and starts it immediately.
 static func start_progress_timer(time: float, callback: Callable) -> ProgressTimer:
 	var timer = ProgressTimer.new()
-	Refs.level_container.add_child(timer)
 	timer.start(time)
 	timer.get_tree().create_timer(time).timeout.connect(callback)
 	return timer
