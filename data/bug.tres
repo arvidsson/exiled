@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MobData" format=3 uid="uid://b14qqeyt7psut"]
+
+[ext_resource type="PackedScene" uid="uid://ceg8gu77rabwf" path="res://scenes/mobs/bug.tscn" id="1_or808"]
+[ext_resource type="Script" uid="uid://cg577v8dg55pn" path="res://scripts/data/mob_data.gd" id="2_1gn2m"]
+
+[resource]
+resource_name = "bug"
+script = ExtResource("2_1gn2m")
+scene = ExtResource("1_or808")
+metadata/_custom_type_script = "uid://cg577v8dg55pn"

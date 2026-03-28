@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ckk6ek7skfrkg"]
+
+[ext_resource type="Texture2D" uid="uid://dgnvjqk4qjsjo" path="res://sprites/level/tileset.png" id="1_gxlcl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0edug"]
+atlas = ExtResource("1_gxlcl")
+region = Rect2(160.40123, 100.53623, 13.844391, 10.823799)
+
+[node name="Grass3" type="Sprite2D" unique_id=1390833920]
+texture = SubResource("AtlasTexture_0edug")

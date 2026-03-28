@@ -3,22 +3,35 @@
 [ext_resource type="PackedScene" uid="uid://di0ys06d7ggkp" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://b53dj4ns7smsg" path="res://scenes/ui/stamina_bar.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://cdm33uoxgay1y" path="res://scenes/ui/xp_bar.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hp_label.tscn" id="4_hp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ammo_label.tscn" id="5_ammo"]
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
 [ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
 [ext_resource type="Script" uid="uid://bo1reapum7w1c" path="res://scripts/pool.gd" id="8_pool"]
 [ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="8_tipki"]
-[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/enemy.tscn" id="9_enemy"]
+[ext_resource type="PackedScene" uid="uid://cdygoa44b23lp" path="res://scenes/level/grass.tscn" id="10_dp3eg"]
 [ext_resource type="Script" uid="uid://dw8wo2ong6uwo" path="res://scripts/enemy_spawner.gd" id="10_spawn"]
-[ext_resource type="PackedScene" path="res://scenes/xp_pickup.tscn" id="11_xp"]
+[ext_resource type="PackedScene" uid="uid://bbvjcp5vnrlvj" path="res://scenes/level/grass2.tscn" id="11_0ld40"]
+[ext_resource type="PackedScene" uid="uid://ckk6ek7skfrkg" path="res://scenes/level/grass3.tscn" id="12_gqmmt"]
+[ext_resource type="PackedScene" uid="uid://b5s1262tw3qbw" path="res://scenes/mobs/lizard.tscn" id="12_trceg"]
+[ext_resource type="PackedScene" uid="uid://cvodf4utcpbmb" path="res://scenes/level/grass4.tscn" id="13_yc10j"]
+[ext_resource type="PackedScene" uid="uid://drhkct1v4w0wa" path="res://scenes/level/grass5.tscn" id="14_jscy8"]
 
 [node name="Main" type="Node2D" unique_id=350215899]
 script = ExtResource("7_main")
 
 [node name="Player" parent="." unique_id=1241231395 instance=ExtResource("1_o5qli")]
+bullet_speed = null
 roll_speed_mult = 2.0
+max_stamina = null
 stamina_regen_per_sec = 10.0
 roll_stamina_cost = 40.0
+max_hp = null
+xp_per_level = null
+magazine_size = null
+fire_interval_sec = null
+reload_duration_sec = null
 
 [node name="FollowCamera" type="Node2D" parent="." unique_id=742758082 node_paths=PackedStringArray("target", "bounds_source")]
 script = ExtResource("5_fc")
@@ -33,11 +46,23 @@ bounds_source = NodePath("../Level")
 
 [node name="XPBar" parent="UI" unique_id=1431045425 instance=ExtResource("3_sugp2")]
 
+[node name="HpLabel" parent="UI" unique_id=1431045424 instance=ExtResource("4_hp")]
+
+[node name="AmmoLabel" parent="UI" unique_id=1431045426 instance=ExtResource("5_ammo")]
+
 [node name="EnemySpawner" type="Node" parent="." unique_id=2077478281]
 script = ExtResource("10_spawn")
+ramp_duration_sec = null
+spawn_interval_start = null
+spawn_interval_end = null
+enemies_per_wave_start = null
+enemies_per_wave_end = null
+ring_margin = null
+clamp_to_level = null
 
 [node name="Level" type="Node2D" parent="." unique_id=926282365]
 script = ExtResource("6_lvl")
+grass_scenes = Array[PackedScene]([ExtResource("10_dp3eg"), ExtResource("11_0ld40"), ExtResource("12_gqmmt"), ExtResource("13_yc10j"), ExtResource("14_jscy8")])
 
 [node name="GrassContainer" type="Node2D" parent="Level" unique_id=1837462001]
 
@@ -57,12 +82,6 @@ prewarm_on_ready = 24
 
 [node name="EnemyPool" type="Node" parent="Pools" unique_id=2077478282 node_paths=PackedStringArray("spawn_parent")]
 script = ExtResource("8_pool")
-template = ExtResource("9_enemy")
+template = ExtResource("12_trceg")
 spawn_parent = NodePath("../../Level/EnemyContainer")
 prewarm_on_ready = 12
-
-[node name="XpPool" type="Node" parent="Pools" unique_id=2077478283 node_paths=PackedStringArray("spawn_parent")]
-script = ExtResource("8_pool")
-template = ExtResource("11_xp")
-spawn_parent = NodePath("../../Level/XpContainer")
-prewarm_on_ready = 28

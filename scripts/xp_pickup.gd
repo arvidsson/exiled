@@ -1,4 +1,5 @@
 extends Area2D
+class_name XPPickup
 
 @export var magnet_radius: float = 80.0
 @export var suck_speed: float = 240.0
@@ -10,13 +11,13 @@ var _collected := false
 var _lifetime_timer: SceneTreeTimer
 
 
-func on_spawn() -> void:
+func _on_spawn() -> void:
 	_cancel_lifetime()
 	_collected = false
 	_lifetime_timer = Tools.call_delay(self, lifetime, _on_lifetime_ended)
 
 
-func on_despawn() -> void:
+func _on_despawn() -> void:
 	_cancel_lifetime()
 
 
@@ -32,8 +33,7 @@ func _on_lifetime_ended() -> void:
 	_lifetime_timer = null
 	if _collected:
 		return
-	if Refs.xp_pool != null:
-		Refs.xp_pool.despawn(self)
+	Pools.despawn(self)
 
 
 func setup(amount: int) -> void:
@@ -67,5 +67,4 @@ func _collect(player: Node2D) -> void:
 	_cancel_lifetime()
 	if player.has_method(&"add_xp"):
 		player.add_xp(xp_amount)
-	if Refs.xp_pool != null:
-		Refs.xp_pool.despawn(self)
+	Pools.despawn(self)

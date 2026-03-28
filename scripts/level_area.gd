@@ -5,7 +5,7 @@ const WALL_THICKNESS := 24.0
 @export var level_rect: Rect2 = Rect2(0, 0, 2000, 1500)
 @export var grass_count: int = 400
 @export var grass_margin: float = 8.0
-@export var grass_scene: PackedScene = preload("res://scenes/level/grass.tscn")
+@export var grass_scenes: Array[PackedScene] = []
 
 @onready var _grass_container: Node2D = $GrassContainer
 
@@ -32,7 +32,7 @@ func _sync_follow_camera_to_player() -> void:
 
 
 func _spawn_grass() -> void:
-	if grass_scene == null or _grass_container == null:
+	if grass_scenes == null or _grass_container == null:
 		return
 	var r := level_rect
 	var x0 := r.position.x + grass_margin
@@ -42,7 +42,8 @@ func _spawn_grass() -> void:
 	if x0 > x1 or y0 > y1:
 		return
 	for i in grass_count:
-		var g: Node2D = grass_scene.instantiate()
+		var random_scene: PackedScene = grass_scenes.pick_random()
+		var g: Node2D = random_scene.instantiate()
 		g.position = Vector2(randf_range(x0, x1), randf_range(y0, y1))
 		g.z_index = -2
 		_grass_container.add_child(g)

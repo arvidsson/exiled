@@ -81,12 +81,11 @@ func take_hit() -> void:
 	_dying = true
 	_attacking = false
 	velocity = Vector2.ZERO
+	SoundManager.play_sfx(Prefabs.hit_snd)
 	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
 	collision_layer = 0
-	if Refs.xp_pool != null:
-		var orb: Node = Refs.xp_pool.spawn(null, global_position)
-		if orb != null and orb.has_method(&"setup"):
-			orb.setup(xp_reward)
+	var xp_orb = Pools.spawn("xp_pickup", global_position) as XPPickup
+	xp_orb.setup(xp_reward)
 	if sprite.animation_finished.is_connected(_on_attack_anim_finished):
 		sprite.animation_finished.disconnect(_on_attack_anim_finished)
 	sprite.play(&"die")

@@ -8,6 +8,9 @@ extends CharacterBody2D
 @export var roll_stamina_cost: float = 35.0
 @export var max_hp: int = 2
 @export var xp_per_level: float = 100.0
+@export var magazine_size: int = 6
+@export var fire_interval_sec: float = 0.2
+@export var reload_duration_sec: float = 1.0
 
 const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
@@ -20,6 +23,10 @@ var current_stamina: float
 var current_xp: float = 0.0
 var player_level: int = 1
 var _hurt_tween: Tween
+var ammo: int
+var _reloading := false
+var _reload_remaining: float = 0.0
+var _fire_cooldown: float = 0.0
 
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
@@ -28,7 +35,10 @@ var _hurt_tween: Tween
 func _ready() -> void:
 	current_stamina = max_stamina
 	current_hp = max_hp
+	ammo = magazine_size
 	call_deferred(&"_sync_xp_bar")
+	call_deferred(&"_sync_hp_label")
+	call_deferred(&"_sync_ammo_label")
 
 
 func add_xp(amount: int) -> void:
@@ -42,6 +52,7 @@ func add_xp(amount: int) -> void:
 func take_damage(amount: int) -> void:
 	current_hp -= amount
 	_play_hurt_flash()
+	_sync_hp_label()
 	var par := get_parent()
 	if par != null:
 		var fc: Node = par.get_node_or_null("FollowCamera")
@@ -81,6 +92,8 @@ func _physics_process(delta: float) -> void:
 		velocity = _roll_dir * max_speed * roll_speed_mult
 		move_and_slide()
 		_sync_stamina_bar()
+		_sync_hp_label()
+		_sync_ammo_label()
 		return
 
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -97,10 +110,28 @@ func _physics_process(delta: float) -> void:
 	var facing_up: bool = abs(cur_dir.x) < abs(cur_dir.y) and cur_dir.y < 0
 	gun.z_index = -1 if facing_up else 1
 
-	if Input.is_action_just_pressed("shoot"):
+	_fire_cooldown = maxf(0.0, _fire_cooldown - delta)
+	if _reloading:
+		_reload_remaining -= delta
+		if _reload_remaining <= 0.0:
+			_reloading = false
+			ammo = magazine_size
+			_fire_cooldown = fire_interval_sec
+
+	if not _reloading:
+		if Input.is_action_just_pressed("reload") and ammo < magazine_size:
+			_start_reload()
+		elif Input.is_action_pressed("shoot") and ammo == 0:
+			_start_reload()
+
+	if not _reloading and Input.is_action_pressed("shoot") and ammo > 0 and _fire_cooldown <= 0.0:
 		_fire()
+		ammo -= 1
+		_fire_cooldown = fire_interval_sec
 
 	_sync_stamina_bar()
+	_sync_hp_label()
+	_sync_ammo_label()
 
 func _start_roll() -> void:
 	current_stamina = maxf(0.0, current_stamina - roll_stamina_cost)
@@ -132,9 +163,30 @@ func _sync_xp_bar() -> void:
 	bar.max_value = xp_per_level
 	bar.value = current_xp
 
+
+func _sync_hp_label() -> void:
+	if Refs.hp_label == null:
+		return
+	Refs.hp_label.text = "hp %d / %d" % [current_hp, max_hp]
+
+
+func _sync_ammo_label() -> void:
+	if Refs.ammo_label == null:
+		return
+	Refs.ammo_label.text = "ammo %d / %d" % [ammo, magazine_size]
+
+
+func _start_reload() -> void:
+	if _reloading or ammo >= magazine_size:
+		return
+	_reloading = true
+	_reload_remaining = reload_duration_sec
+
+
 func _fire() -> void:
 	var bullet := Refs.bullet_pool.spawn(null, muzzle.global_position) as Area2D
 	bullet.setup(muzzle.global_transform.x, bullet_speed)
+	SoundManager.play_sfx(Prefabs.shoot_snd)
 
 func _play_roll_anim(dir: Vector2) -> void:
 	var anim: String
