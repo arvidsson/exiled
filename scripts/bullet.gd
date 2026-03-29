@@ -39,18 +39,16 @@ func setup(direction: Vector2, move_speed: float) -> void:
 func _physics_process(delta: float) -> void:
 	global_position += velocity * delta
 
-
 func _on_body_entered(body: Node2D) -> void:
 	if _spent:
 		return
-	if body.is_in_group(&"enemy") and body.has_method(&"take_hit"):
+	if body.has_method(&"take_damage"):
 		_spent = true
 		# body_entered runs while physics queries flush; reparenting/spawning
 		# CollisionObject2D (e.g. XP orb Area2D) must happen after that.
 		call_deferred(&"_apply_hit", body)
 
-
 func _apply_hit(body: Node2D) -> void:
-	if is_instance_valid(body) and body.is_in_group(&"enemy") and body.has_method(&"take_hit"):
-		body.take_hit()
+	if is_instance_valid(body) and body.has_method(&"take_damage"):
+		body.take_damage()
 	Pools.despawn(self)

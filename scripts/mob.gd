@@ -84,7 +84,7 @@ func _on_attack_anim_finished() -> void:
 	_attack_cd_remaining = attack_cooldown
 	sprite.play(&"idle")
 
-func take_hit() -> void:
+func take_damage(amount: int = 1) -> void:
 	if _dying:
 		return
 	_dying = true

@@ -65,6 +65,12 @@ class Pool:
 			push_warning("[Pools] Instance not in pool, freeing instead: ", instance.name)
 			instance.queue_free()
 
+func clear():
+	for pool in _pools.values():
+		if is_instance_valid(pool):
+			pool.queue_free()
+	_pools.clear()
+
 func register(scene: PackedScene, parent: Node, pool_size: int = 10):
 	var scene_name: String = scene.resource_path.get_file().get_basename()
 	if _pools.has(scene_name):

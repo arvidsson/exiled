@@ -49,8 +49,10 @@ func add_xp(amount: int) -> void:
 		player_level += 1
 	_sync_xp_bar()
 
-
-func take_damage(amount: int) -> void:
+func take_damage(amount: int = 1) -> void:
+	# HACK: should check elsewhere, yup cuz now bullets gets destroyed on collision!
+	if _rolling:
+		return
 	current_hp -= amount
 	_play_hurt_flash()
 	_sync_hp_label()

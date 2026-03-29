@@ -6,12 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://bg4ey3x532mxi" path="res://scenes/xp_pickup.tscn" id="4_4dw0s"]
 [ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="5_5rkdf"]
 [ext_resource type="AudioStream" uid="uid://cs0iuyy7ky0is" path="res://sfx/shoot.wav" id="6_1b46n"]
+[ext_resource type="PackedScene" uid="uid://r3sd2tgxs5li" path="res://scenes/mob_bullet.tscn" id="6_x6xvh"]
 [ext_resource type="AudioStream" uid="uid://dkr3n0efaj0lc" path="res://sfx/hurt.wav" id="7_x6xvh"]
 [ext_resource type="AudioStream" uid="uid://5kbn2v4ysu3v" path="res://sfx/music.mp3" id="8_kdk40"]
 
 [node name="Data" type="Node" unique_id=16236980]
 script = ExtResource("1_2lsid")
 mob_data = Array[Resource]([ExtResource("3_4dw0s"), ExtResource("2_gner7")])
-scenes = Array[PackedScene]([ExtResource("4_4dw0s"), ExtResource("5_5rkdf")])
+scenes = Array[PackedScene]([ExtResource("4_4dw0s"), ExtResource("5_5rkdf"), ExtResource("6_x6xvh")])
 sounds = Array[AudioStream]([ExtResource("6_1b46n"), ExtResource("7_x6xvh")])
 music = Array[AudioStream]([ExtResource("8_kdk40")])
