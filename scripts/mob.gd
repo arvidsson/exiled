@@ -12,16 +12,35 @@ var _dying := false
 var _attacking := false
 var _attack_cd_remaining := 0.0
 
+var _player: Player
+
+func _ready() -> void:
+	_player = get_tree().get_first_node_in_group("player") as Player
+
+func _disconnect_animation_finished(callback: Callable) -> void:
+	if sprite.animation_finished.is_connected(callback):
+		sprite.animation_finished.disconnect(callback)
+
+func _play_animation(name: StringName) -> void:
+	if sprite.animation != name:
+		sprite.play(name)
+
+func _play_animation_once(anim: StringName, callback: Callable) -> void:
+	_disconnect_animation_finished(callback)
+	sprite.play(anim)
+	sprite.animation_finished.connect(callback, CONNECT_ONE_SHOT)
+
+func _distance_to_player_sq() -> float:
+	return global_position.distance_squared_to(_player.global_position)
+
+func _dir_to_player() -> Vector2:
+	return global_position.direction_to(_player.global_position)
 
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
 
-	var player := get_tree().get_first_node_in_group("player") as Node2D
-	if player == null:
-		return
-
-	_update_facing(player.global_position)
+	_update_facing(_player.global_position)
 
 	if _attack_cd_remaining > 0.0:
 		_attack_cd_remaining = maxf(0.0, _attack_cd_remaining - delta)
@@ -31,7 +50,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var dist_sq := global_position.distance_squared_to(player.global_position)
+	var dist_sq := _distance_to_player_sq()
 	var range_sq := attack_range * attack_range
 	if dist_sq <= range_sq and _attack_cd_remaining <= 0.0 and not _attacking:
 		_start_attack()
@@ -39,42 +58,31 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var dir := global_position.direction_to(player.global_position)
+	var dir := _dir_to_player()
 	velocity = dir * speed
 	move_and_slide()
 
 	if velocity.length_squared() > 0.0001:
-		if sprite.animation != &"move":
-			sprite.play(&"move")
+		_play_animation(&"move")
 	else:
-		if sprite.animation != &"idle":
-			sprite.play(&"idle")
-
+		_play_animation(&"idle")
 
 func _update_facing(target: Vector2) -> void:
 	sprite.flip_h = target.x < global_position.x
 
-
 func _start_attack() -> void:
 	_attacking = true
-	sprite.play(&"attack")
-	if sprite.animation_finished.is_connected(_on_attack_anim_finished):
-		sprite.animation_finished.disconnect(_on_attack_anim_finished)
-	sprite.animation_finished.connect(_on_attack_anim_finished, CONNECT_ONE_SHOT)
-
+	_play_animation_once(&"attack", _on_attack_anim_finished)
 
 func _on_attack_anim_finished() -> void:
 	if _dying:
 		return
-	var player := get_tree().get_first_node_in_group("player") as Node2D
-	if player != null and global_position.distance_squared_to(player.global_position) <= attack_range * attack_range:
-		if player.has_method(&"take_damage"):
-			player.take_damage(1)
+	if _distance_to_player_sq() <= attack_range * attack_range:
+		if _player.has_method(&"take_damage"):
+			_player.take_damage(1)
 	_attacking = false
 	_attack_cd_remaining = attack_cooldown
-	if not _dying and sprite.animation != &"die":
-		sprite.play(&"idle")
-
+	sprite.play(&"idle")
 
 func take_hit() -> void:
 	if _dying:
@@ -85,16 +93,12 @@ func take_hit() -> void:
 	Audio.play_sfx(Data.get_sound("hurt"))
 	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
 	collision_layer = 0
-	var xp_orb = Pools.spawn("xp_pickup", global_position) as XPPickup
-	xp_orb.setup(xp_reward)
-	if sprite.animation_finished.is_connected(_on_attack_anim_finished):
-		sprite.animation_finished.disconnect(_on_attack_anim_finished)
-	sprite.play(&"die")
-	if sprite.animation_finished.is_connected(_on_die_anim_finished):
-		sprite.animation_finished.disconnect(_on_die_anim_finished)
-	sprite.animation_finished.connect(_on_die_anim_finished, CONNECT_ONE_SHOT)
+	_disconnect_animation_finished(_on_attack_anim_finished)
+	_play_animation_once(&"die", _on_die_anim_finished)
 
 func _on_die_anim_finished() -> void:
+	var xp_orb = Pools.spawn("xp_pickup", global_position) as XPPickup
+	xp_orb.setup(xp_reward)
 	Pools.despawn(self)
 
 func _on_spawn() -> void:
@@ -102,21 +106,11 @@ func _on_spawn() -> void:
 	_attacking = false
 	_attack_cd_remaining = 0.0
 	velocity = Vector2.ZERO
-	collision_layer = 4
-	collision_mask = 1
-	var spr := $AnimatedSprite2D as AnimatedSprite2D
-	spr.flip_h = false
-	spr.play(&"idle")
-	if spr.animation_finished.is_connected(_on_attack_anim_finished):
-		spr.animation_finished.disconnect(_on_attack_anim_finished)
-	if spr.animation_finished.is_connected(_on_die_anim_finished):
-		spr.animation_finished.disconnect(_on_die_anim_finished)
-
+	collision_layer = Globals.CollisionLayer.MOB
+	collision_mask = Globals.CollisionLayer.WORLD
+	sprite.flip_h = false
+	sprite.play(&"idle")
 
 func _on_despawn() -> void:
-	velocity = Vector2.ZERO
-	var spr := $AnimatedSprite2D as AnimatedSprite2D
-	if spr.animation_finished.is_connected(_on_attack_anim_finished):
-		spr.animation_finished.disconnect(_on_attack_anim_finished)
-	if spr.animation_finished.is_connected(_on_die_anim_finished):
-		spr.animation_finished.disconnect(_on_die_anim_finished)
+	_disconnect_animation_finished(_on_attack_anim_finished)
+	_disconnect_animation_finished(_on_die_anim_finished)
