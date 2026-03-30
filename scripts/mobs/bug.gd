@@ -6,6 +6,9 @@ extends Mob
 
 var _time_since_last_shot: float = 0.0
 
+func _draw() -> void:
+	draw_circle(Vector2.ZERO, stop_range, Color(1, 0, 0, 0.3), false)
+
 func _ready() -> void:
 	super._ready()
 

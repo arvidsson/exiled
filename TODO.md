@@ -1,6 +1,9 @@
+- mob:
+- refactor so physics_process handles all stuff, move_towards_player()
+- hooks: on_death, on_take_damage,
+
 - reload weapon, only when trying to shoot with zero ammo?
 - ammo
-- shooting enemy
 - shadows under entities
 - sounds
 - enemy has hp

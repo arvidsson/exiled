@@ -1,9 +1,10 @@
 extends Node2D
 
-
+# NOTE: autoload ready called before this one
 func _ready() -> void:
 	# TODO: rethink this?
 	Pools.clear()
+	Pools.register(Data.get_mob_data("warrior").scene, $Level/MobContainer)
 	Pools.register(Data.get_mob_data("lizard").scene, $Level/MobContainer)
 	Pools.register(Data.get_mob_data("bug").scene, $Level/MobContainer)
 	Pools.register(Data.get_scene("bullet"), $Level/BulletContainer)

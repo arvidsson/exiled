@@ -171,7 +171,7 @@ func _start_reload() -> void:
 
 func _fire() -> void:
 	var bullet := Pools.spawn("bullet", muzzle.global_position) as Area2D
-	bullet.setup(muzzle.global_transform.x, bullet_speed)
+	bullet.setup(muzzle.global_transform.x, bullet_speed, randi_range(3, 6))
 	Audio.play_sfx(Data.get_sound("shoot"))
 
 func _play_roll_anim(dir: Vector2) -> void:

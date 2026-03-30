@@ -6,6 +6,7 @@ extends Area2D
 var velocity := Vector2.ZERO
 var _spent := false
 var _lifetime_delay: SceneTreeTimer
+var _damage: int = 1
 
 func _ready() -> void:
 	if not body_entered.is_connected(_on_body_entered):
@@ -33,8 +34,9 @@ func _on_lifetime_ended() -> void:
 	_spent = true
 	Pools.despawn(self)
 
-func setup(direction: Vector2, move_speed: float) -> void:
+func setup(direction: Vector2, move_speed: float, damage: int = 1) -> void:
 	velocity = direction.normalized() * move_speed
+	_damage = damage
 
 func _physics_process(delta: float) -> void:
 	global_position += velocity * delta
@@ -50,5 +52,5 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _apply_hit(body: Node2D) -> void:
 	if is_instance_valid(body) and body.has_method(&"take_damage"):
-		body.take_damage()
+		body.take_damage(_damage)
 	Pools.despawn(self)

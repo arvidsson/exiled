@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://b5s1262tw3qbw"]
+[gd_scene format=3 uid="uid://cr74oa801on3x"]
 
 [ext_resource type="Script" uid="uid://bpfb0qg0ulapc" path="res://scripts/mobs/lizard.gd" id="1_0rgye"]
+[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_gghss"]
 [ext_resource type="Texture2D" uid="uid://dc6ywvx2m07v3" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_0.png" id="2_wxnui"]
 [ext_resource type="Texture2D" uid="uid://py2ieumdn5y3" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_1.png" id="3_yuqk6"]
 [ext_resource type="Texture2D" uid="uid://4rpl4olagiw7" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_2.png" id="4_d2bv4"]
@@ -27,7 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://d0kqbt5q1sko4" path="res://sprites/enemy/lizard/sLizardWalk/sLizardWalk_6.png" id="25_7wyw7"]
 [ext_resource type="Texture2D" uid="uid://xpug2vdunoy8" path="res://sprites/enemy/lizard/sLizardWalk/sLizardWalk_7.png" id="26_ymooe"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_8tegq"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_0rgye"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -125,20 +126,8 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8tegq"]
-radius = 8.0
-
-[node name="Lizard" type="CharacterBody2D" unique_id=954850513 groups=["enemy"]]
-collision_layer = 4
+[node name="Lizard" unique_id=954850513 instance=ExtResource("1_gghss")]
 script = ExtResource("1_0rgye")
-speed = 60.0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1362614468]
-position = Vector2(0, -11)
-sprite_frames = SubResource("SpriteFrames_8tegq")
-animation = &"move"
-frame_progress = 0.34782305
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1042489938]
-position = Vector2(0, -7)
-shape = SubResource("CircleShape2D_8tegq")
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
+sprite_frames = SubResource("SpriteFrames_0rgye")

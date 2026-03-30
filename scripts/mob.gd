@@ -1,18 +1,33 @@
 extends CharacterBody2D
 class_name Mob
 
+# TODO: should be set from the data when spawned
 @export var speed: float = 40.0
 @export var attack_range: float = 32.0
 @export var attack_cooldown: float = 1.2
 @export var xp_reward: int = 10
+@export var max_health: int = 10
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var healthbar: ProgressBar = $HealthBar
+
+const HURT_FLASH_PEAK := Color(5, 5, 5)
+const HURT_FLASH_DURATION := 0.12
 
 var _dying := false
 var _attacking := false
 var _attack_cd_remaining := 0.0
-
+var _hurt_tween: Tween
 var _player: Player
+var _health: int
+
+func _draw() -> void:
+	var hurtbox_radius: float = 16.0  # size of the attack hit area
+	# Draw attack range (red ring, not filled)
+	#draw_circle(Vector2.ZERO, attack_range, Color(1, 0, 0, 0.5), false)
+	# Draw hurtbox only while attacking (yellow ring)
+	if _attacking:
+		draw_circle(Vector2.ZERO, hurtbox_radius, Color(1, 1, 0, 0.7), false)
 
 func _ready() -> void:
 	_player = get_tree().get_first_node_in_group("player") as Player
@@ -87,11 +102,30 @@ func _on_attack_anim_finished() -> void:
 func take_damage(amount: int = 1) -> void:
 	if _dying:
 		return
+
+	_health = max(0, _health - amount)
+	_play_hurt_flash()
+	_update_healthbar()
+	if _health == 0:
+		_die()
+
+func _play_hurt_flash() -> void:
+	if _hurt_tween != null:
+		_hurt_tween.kill()
+	_hurt_tween = create_tween()
+	_hurt_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	sprite.modulate = HURT_FLASH_PEAK
+	_hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
+
+func _update_healthbar() -> void:
+	healthbar.value = float(_health) / max_health * 100
+	healthbar.visible = _health < max_health
+
+func _die() -> void:
 	_dying = true
 	_attacking = false
 	velocity = Vector2.ZERO
 	Audio.play_sfx(Data.get_sound("hurt"))
-	# Bullets monitor layer 4; clear immediately so dying bodies do not consume shots.
 	collision_layer = 0
 	_disconnect_animation_finished(_on_attack_anim_finished)
 	_play_animation_once(&"die", _on_die_anim_finished)
@@ -102,6 +136,8 @@ func _on_die_anim_finished() -> void:
 	Pools.despawn(self)
 
 func _on_spawn() -> void:
+	_health = max_health
+	healthbar.visible = false
 	_dying = false
 	_attacking = false
 	_attack_cd_remaining = 0.0

@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bh5gebge6imy8" path="res://scripts/systems/data.gd" id="1_2lsid"]
 [ext_resource type="Resource" uid="uid://df46lubeh7ws7" path="res://data/lizard.tres" id="2_gner7"]
+[ext_resource type="Script" uid="uid://cg577v8dg55pn" path="res://scripts/data/mob_data.gd" id="2_kdk40"]
 [ext_resource type="Resource" uid="uid://b14qqeyt7psut" path="res://data/bug.tres" id="3_4dw0s"]
 [ext_resource type="PackedScene" uid="uid://bg4ey3x532mxi" path="res://scenes/xp_pickup.tscn" id="4_4dw0s"]
 [ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="5_5rkdf"]
+[ext_resource type="Resource" uid="uid://dme3r7rkupei7" path="res://data/warrior.tres" id="5_nrj2e"]
 [ext_resource type="AudioStream" uid="uid://cs0iuyy7ky0is" path="res://sfx/shoot.wav" id="6_1b46n"]
 [ext_resource type="PackedScene" uid="uid://r3sd2tgxs5li" path="res://scenes/mob_bullet.tscn" id="6_x6xvh"]
 [ext_resource type="AudioStream" uid="uid://dkr3n0efaj0lc" path="res://sfx/hurt.wav" id="7_x6xvh"]
@@ -12,7 +14,7 @@
 
 [node name="Data" type="Node" unique_id=16236980]
 script = ExtResource("1_2lsid")
-mob_data = Array[Resource]([ExtResource("3_4dw0s"), ExtResource("2_gner7")])
+mob_data = Array[ExtResource("2_kdk40")]([ExtResource("3_4dw0s"), ExtResource("2_gner7"), ExtResource("5_nrj2e")])
 scenes = Array[PackedScene]([ExtResource("4_4dw0s"), ExtResource("5_5rkdf"), ExtResource("6_x6xvh")])
 sounds = Array[AudioStream]([ExtResource("6_1b46n"), ExtResource("7_x6xvh")])
 music = Array[AudioStream]([ExtResource("8_kdk40")])
