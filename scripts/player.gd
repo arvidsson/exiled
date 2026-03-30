@@ -19,6 +19,7 @@ const HURT_FLASH_DURATION := 0.12
 var cur_dir := Vector2.DOWN
 var current_hp: int
 var _rolling := false
+var _dying := false
 var _roll_dir := Vector2.DOWN
 var current_stamina: float
 var current_xp: float = 0.0
@@ -41,7 +42,6 @@ func _ready() -> void:
 	call_deferred(&"_sync_hp_label")
 	call_deferred(&"_sync_ammo_label")
 
-
 func add_xp(amount: int) -> void:
 	current_xp += amount
 	while current_xp >= xp_per_level:
@@ -50,8 +50,8 @@ func add_xp(amount: int) -> void:
 	_sync_xp_bar()
 
 func take_damage(amount: int = 1) -> void:
-	# HACK: should check elsewhere, yup cuz now bullets gets destroyed on collision!
-	if _rolling:
+	# TODO: hack! should check elsewhere, yup cuz now bullets gets destroyed on collision!
+	if _rolling or _dying:
 		return
 	current_hp -= amount
 	_play_hurt_flash()
@@ -62,8 +62,34 @@ func take_damage(amount: int = 1) -> void:
 		if fc != null and fc.has_method(&"add_shake"):
 			fc.call(&"add_shake", 6.0)
 	if current_hp <= 0:
-		get_tree().reload_current_scene()
+		_die()
+		#get_tree().reload_current_scene()
 
+func _disconnect_animation_finished(callback: Callable) -> void:
+	if sprite.animation_finished.is_connected(callback):
+		sprite.animation_finished.disconnect(callback)
+
+func _play_animation(name: StringName) -> void:
+	if sprite.animation != name:
+		sprite.play(name)
+
+func _play_animation_once(anim: StringName, callback: Callable) -> void:
+	_disconnect_animation_finished(callback)
+	sprite.play(anim)
+	sprite.animation_finished.connect(callback, CONNECT_ONE_SHOT)
+
+func _die() -> void:
+	_dying = true
+	_rolling = false
+	_reloading = false
+	velocity = Vector2.ZERO
+	gun.hide()  # hide gun during death animation
+	_play_animation_once("die", _on_death_anim_finished)
+
+func _on_death_anim_finished() -> void:
+	Tools.call_delay(self, 1.2, func() -> void:
+		get_tree().reload_current_scene()
+	)
 
 func _play_hurt_flash() -> void:
 	if _hurt_tween != null:
@@ -73,9 +99,8 @@ func _play_hurt_flash() -> void:
 	sprite.modulate = HURT_FLASH_PEAK
 	_hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
 
-
 func _process(_delta: float) -> void:
-	if _rolling:
+	if _rolling or _dying:
 		return
 	var target := get_global_mouse_position()
 	if (target - global_position).length_squared() > 0.0001:
@@ -85,6 +110,8 @@ func _process(_delta: float) -> void:
 		gun.scale.y = 1.0
 
 func _physics_process(delta: float) -> void:
+	if _dying:
+		return
 	if current_stamina < max_stamina:
 		current_stamina = minf(max_stamina, current_stamina + stamina_regen_per_sec * delta)
 

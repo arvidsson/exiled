@@ -122,6 +122,7 @@ func _update_healthbar() -> void:
 	healthbar.visible = _health < max_health
 
 func _die() -> void:
+	healthbar.visible = false
 	_dying = true
 	_attacking = false
 	velocity = Vector2.ZERO
