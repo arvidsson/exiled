@@ -10,16 +10,13 @@ var xp_amount: int = 0
 var _collected := false
 var _lifetime_timer: SceneTreeTimer
 
-
 func _on_spawn() -> void:
 	_cancel_lifetime()
 	_collected = false
 	_lifetime_timer = Tools.call_delay(self, lifetime, _on_lifetime_ended)
 
-
 func _on_despawn() -> void:
 	_cancel_lifetime()
-
 
 func _cancel_lifetime() -> void:
 	if _lifetime_timer == null:
@@ -28,17 +25,14 @@ func _cancel_lifetime() -> void:
 		_lifetime_timer.timeout.disconnect(_on_lifetime_ended)
 	_lifetime_timer = null
 
-
 func _on_lifetime_ended() -> void:
 	_lifetime_timer = null
 	if _collected:
 		return
 	Pools.despawn(self)
 
-
 func setup(amount: int) -> void:
 	xp_amount = amount
-
 
 func _physics_process(delta: float) -> void:
 	if _collected:
@@ -58,7 +52,6 @@ func _physics_process(delta: float) -> void:
 	if dist_sq <= magnet_sq:
 		var dir := to_player.normalized()
 		global_position += dir * suck_speed * delta
-
 
 func _collect(player: Node2D) -> void:
 	if _collected:

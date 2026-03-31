@@ -13,6 +13,8 @@ class_name Player
 @export var fire_interval_sec: float = 0.2
 @export var reload_duration_sec: float = 1.0
 
+var damage:int = 3
+
 const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
 
@@ -47,6 +49,7 @@ func add_xp(amount: int) -> void:
 	while current_xp >= xp_per_level:
 		current_xp -= xp_per_level
 		player_level += 1
+		Events.levelup.emit()
 	_sync_xp_bar()
 
 func take_damage(amount: int = 1) -> void:
@@ -198,7 +201,7 @@ func _start_reload() -> void:
 
 func _fire() -> void:
 	var bullet := Pools.spawn("bullet", muzzle.global_position) as Area2D
-	bullet.setup(muzzle.global_transform.x, bullet_speed, randi_range(3, 6))
+	bullet.setup(muzzle.global_transform.x, bullet_speed, damage)
 	Audio.play_sfx(Data.get_sound("shoot"))
 
 func _play_roll_anim(dir: Vector2) -> void:

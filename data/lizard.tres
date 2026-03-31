@@ -7,4 +7,5 @@
 resource_name = "lizard"
 script = ExtResource("1_2omw5")
 scene = ExtResource("1_xq6k3")
+xp_reward = 50
 metadata/_custom_type_script = "uid://cg577v8dg55pn"

@@ -1,4 +1,5 @@
 extends Mob
+class_name Bug
 
 @export var fire_rate: float = 0.5  # seconds between bullets
 @export var stop_range: float = 150.0  # distance to stop and fire

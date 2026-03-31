@@ -38,17 +38,14 @@ func _process(delta: float) -> void:
 		_spawn_one_on_ring(player.global_position, cam)
 		_left_in_wave -= 1
 
-
 func _ramp_t() -> float:
 	if ramp_duration_sec <= 0.0:
 		return 1.0
 	return clampf(_elapsed / ramp_duration_sec, 0.0, 1.0)
 
-
 func _spawn_interval() -> float:
 	var t := _ramp_t()
 	return maxf(_MIN_INTERVAL, lerpf(spawn_interval_start, spawn_interval_end, t))
-
 
 func _enemies_per_wave() -> int:
 	var t := _ramp_t()
@@ -56,18 +53,15 @@ func _enemies_per_wave() -> int:
 	var b := float(enemies_per_wave_end)
 	return int(round(lerpf(a, b, t)))
 
-
 func _get_player() -> Node2D:
 	for n in get_tree().get_nodes_in_group(&"player"):
 		if n is Node2D:
 			return n as Node2D
 	return null
 
-
 func _ring_radius(cam: Camera2D) -> float:
 	var half := get_viewport().get_visible_rect().size / (2.0 * cam.zoom)
 	return half.length() + ring_margin
-
 
 func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
 	var angle := randf() * TAU

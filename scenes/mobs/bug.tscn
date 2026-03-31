@@ -96,6 +96,7 @@ script = ExtResource("1_ye8fc")
 fire_rate = 0.5
 stop_range = 150.0
 bullet_speed = 200.0
+xp_reward = 50
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
 sprite_frames = SubResource("SpriteFrames_ye8fc")

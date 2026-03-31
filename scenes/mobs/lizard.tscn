@@ -128,6 +128,7 @@ animations = [{
 
 [node name="Lizard" unique_id=954850513 instance=ExtResource("1_gghss")]
 script = ExtResource("1_0rgye")
+xp_reward = 50
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
 sprite_frames = SubResource("SpriteFrames_0rgye")

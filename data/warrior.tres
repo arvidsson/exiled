@@ -7,5 +7,6 @@
 resource_name = "warrior"
 script = ExtResource("1_bwdy4")
 scene = ExtResource("1_aweiw")
+xp_reward = 50
 health = 10
 metadata/_custom_type_script = "uid://cg577v8dg55pn"

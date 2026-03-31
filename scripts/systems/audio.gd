@@ -9,6 +9,7 @@ var _music_player: AudioStreamPlayer
 var _rng := RandomNumberGenerator.new()
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_rng.randomize()
 
 	# Create SFX pool
@@ -20,6 +21,7 @@ func _ready():
 
 	# Create music player
 	_music_player = AudioStreamPlayer.new()
+	_music_player.stream.loop
 	_music_player.bus = bus_music
 	add_child(_music_player)
 

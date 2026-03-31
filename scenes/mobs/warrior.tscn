@@ -3,3 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_amwun"]
 
 [node name="Warrior" unique_id=954850513 instance=ExtResource("1_amwun")]
+xp_reward = 50
