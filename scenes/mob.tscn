@@ -193,6 +193,12 @@ bg_color = Color(0.5137255, 0.02745098, 0.050980393, 1)
 collision_layer = 4
 script = ExtResource("1_bsing")
 speed = 60.0
+attack_range = null
+attack_cooldown = null
+xp_reward = null
+max_health = null
+hurt_flash_color = null
+hurt_flash_duration = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1362614468]
 position = Vector2(0, -11)

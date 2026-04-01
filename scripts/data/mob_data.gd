@@ -7,3 +7,4 @@ class_name MobData
 @export var attack_cooldown: float = 1.2
 @export var xp_reward: int = 10
 @export var health: int = 3
+@export var skills: Array[MobSkill]

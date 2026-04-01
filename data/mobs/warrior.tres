@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MobData" format=3 uid="uid://dme3r7rkupei7"]
+
+[ext_resource type="Script" uid="uid://cg577v8dg55pn" path="res://scripts/data/mob_data.gd" id="2_oienm"]
+[ext_resource type="Script" uid="uid://yv4ndg1kommo" path="res://scripts/mobs/skills/mob_skill.gd" id="3_gex3k"]
+[ext_resource type="Script" uid="uid://buc5okxx7ckj0" path="res://scripts/mobs/skills/melee_attack_mob_skill.gd" id="4_pxlnb"]
+
+[sub_resource type="Resource" id="Resource_fft7c"]
+script = ExtResource("4_pxlnb")
+metadata/_custom_type_script = "uid://buc5okxx7ckj0"
+
+[resource]
+resource_name = "warrior"
+script = ExtResource("2_oienm")
+xp_reward = 50
+health = 10
+skills = Array[ExtResource("3_gex3k")]([SubResource("Resource_fft7c")])
+metadata/_custom_type_script = "uid://cg577v8dg55pn"

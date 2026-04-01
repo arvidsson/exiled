@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bpfb0qg0ulapc" path="res://scripts/mobs/lizard.gd" id="1_0rgye"]
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_gghss"]
 [ext_resource type="Texture2D" uid="uid://dc6ywvx2m07v3" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_0.png" id="2_wxnui"]
+[ext_resource type="Resource" uid="uid://df46lubeh7ws7" path="res://data/mobs/lizard.tres" id="3_ive4f"]
 [ext_resource type="Texture2D" uid="uid://py2ieumdn5y3" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_1.png" id="3_yuqk6"]
 [ext_resource type="Texture2D" uid="uid://4rpl4olagiw7" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_2.png" id="4_d2bv4"]
 [ext_resource type="Texture2D" uid="uid://osiyyqvt6gnl" path="res://sprites/enemy/lizard/sLizardShoot1/sLizardShoot1_3.png" id="5_uqda7"]
@@ -128,7 +129,13 @@ animations = [{
 
 [node name="Lizard" unique_id=954850513 instance=ExtResource("1_gghss")]
 script = ExtResource("1_0rgye")
+data = ExtResource("3_ive4f")
+attack_range = 32.0
+attack_cooldown = 1.2
 xp_reward = 50
+max_health = 10
+hurt_flash_color = Color(5, 5, 5, 1)
+hurt_flash_duration = 0.12
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
 sprite_frames = SubResource("SpriteFrames_0rgye")

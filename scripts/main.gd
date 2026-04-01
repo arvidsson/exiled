@@ -4,9 +4,9 @@ extends Node2D
 func _ready() -> void:
 	# TODO: rethink this?
 	Pools.clear()
-	Pools.register(Data.get_mob_data("warrior").scene, $Level/MobContainer)
-	Pools.register(Data.get_mob_data("lizard").scene, $Level/MobContainer)
-	Pools.register(Data.get_mob_data("bug").scene, $Level/MobContainer)
+	Pools.register(Data.get_scene("warrior"), $Level/MobContainer)
+	Pools.register(Data.get_scene("lizard"), $Level/MobContainer)
+	Pools.register(Data.get_scene("bug"), $Level/MobContainer)
 	Pools.register(Data.get_scene("bullet"), $Level/BulletContainer)
 	Pools.register(Data.get_scene("mob_bullet"), $Level/BulletContainer)
 	Pools.register(Data.get_scene("xp_pickup"), $Level/XpContainer)

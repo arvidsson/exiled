@@ -21,7 +21,6 @@ func _ready():
 
 	# Create music player
 	_music_player = AudioStreamPlayer.new()
-	_music_player.stream.loop
 	_music_player.bus = bus_music
 	add_child(_music_player)
 

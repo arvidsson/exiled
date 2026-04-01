@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dxr76ckgxe4q1" path="res://scripts/mobs/bug.gd" id="1_ye8fc"]
 [ext_resource type="Texture2D" uid="uid://bv0fcp7y6rh3a" path="res://sprites/enemy/bug/sBugShoot1/sBugShoot1_0.png" id="2_cikdw"]
 [ext_resource type="Texture2D" uid="uid://cgpb8mlc12p6r" path="res://sprites/enemy/bug/sBugDeath/sBugDeath_0.png" id="3_1ino6"]
+[ext_resource type="Resource" uid="uid://b14qqeyt7psut" path="res://data/mobs/bug.tres" id="3_7r3fo"]
 [ext_resource type="Texture2D" uid="uid://d3ylt2abjal2y" path="res://sprites/enemy/bug/sBugIdle/sBugIdle_0.png" id="3_or574"]
 [ext_resource type="Texture2D" uid="uid://dv7uxa4gak68t" path="res://sprites/enemy/bug/sBugShoot1/sBugShoot1_1.png" id="3_w8gce"]
 [ext_resource type="Texture2D" uid="uid://rtmkjoopsll3" path="res://sprites/enemy/bug/sBugIdle/sBugIdle_1.png" id="4_1ngxl"]
@@ -96,6 +97,7 @@ script = ExtResource("1_ye8fc")
 fire_rate = 0.5
 stop_range = 150.0
 bullet_speed = 200.0
+data = ExtResource("3_7r3fo")
 xp_reward = 50
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]

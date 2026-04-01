@@ -1,5 +1,5 @@
 extends Mob
-class_name Lizard
+class_name Warrior
 
 func _ready() -> void:
 	super._ready()

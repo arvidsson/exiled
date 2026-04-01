@@ -1,36 +1,30 @@
 extends CharacterBody2D
 class_name Mob
 
-# TODO: should be set from the data when spawned
+@export var data: MobData
 @export var speed: float = 40.0
 @export var attack_range: float = 32.0
 @export var attack_cooldown: float = 1.2
 @export var xp_reward: int = 10
 @export var max_health: int = 10
+@export var hurt_flash_color := Color(5, 5, 5)
+@export var hurt_flash_duration := 0.12
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var healthbar: ProgressBar = $HealthBar
+@onready var player: Player = get_tree().get_first_node_in_group("player") as Player
 
-const HURT_FLASH_PEAK := Color(5, 5, 5)
-const HURT_FLASH_DURATION := 0.12
-
+var _health: int
 var _dying := false
 var _attacking := false
 var _attack_cd_remaining := 0.0
 var _hurt_tween: Tween
-var _player: Player
-var _health: int
-
-func _draw() -> void:
-	var hurtbox_radius: float = 16.0  # size of the attack hit area
-	# Draw attack range (red ring, not filled)
-	#draw_circle(Vector2.ZERO, attack_range, Color(1, 0, 0, 0.5), false)
-	# Draw hurtbox only while attacking (yellow ring)
-	if _attacking:
-		draw_circle(Vector2.ZERO, hurtbox_radius, Color(1, 1, 0, 0.7), false)
+var _skills: Array[MobSkill]
 
 func _ready() -> void:
-	_player = get_tree().get_first_node_in_group("player") as Player
+	if data.skills.size() > 0:
+		for skill in data.skills:
+			_skills.append(skill.duplicate())
 
 func _disconnect_animation_finished(callback: Callable) -> void:
 	if sprite.animation_finished.is_connected(callback):
@@ -45,17 +39,33 @@ func _play_animation_once(anim: StringName, callback: Callable) -> void:
 	sprite.play(anim)
 	sprite.animation_finished.connect(callback, CONNECT_ONE_SHOT)
 
-func _distance_to_player_sq() -> float:
-	return global_position.distance_squared_to(_player.global_position)
+func distance_to_player() -> float:
+	return global_position.distance_to(player.global_position)
 
-func _dir_to_player() -> Vector2:
-	return global_position.direction_to(_player.global_position)
+func distance_to_player_sq() -> float:
+	return global_position.distance_squared_to(player.global_position)
+
+func dir_to_player() -> Vector2:
+	return global_position.direction_to(player.global_position)
+
+func update_facing(target: Vector2) -> void:
+	sprite.flip_h = target.x < global_position.x
+
+func move_towards(target: Vector2) -> void:
+	var dir := global_position.direction_to(target)
+	velocity = dir * speed
+
+func stop() -> void:
+	velocity = Vector2.ZERO
+
+func apply_movement() -> void:
+	move_and_slide()
 
 func _physics_process(delta: float) -> void:
 	if _dying:
 		return
 
-	_update_facing(_player.global_position)
+	update_facing(player.global_position)
 
 	if _attack_cd_remaining > 0.0:
 		_attack_cd_remaining = maxf(0.0, _attack_cd_remaining - delta)
@@ -65,7 +75,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var dist_sq := _distance_to_player_sq()
+	var dist_sq := distance_to_player_sq()
 	var range_sq := attack_range * attack_range
 	if dist_sq <= range_sq and _attack_cd_remaining <= 0.0 and not _attacking:
 		_start_attack()
@@ -73,7 +83,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	var dir := _dir_to_player()
+	var dir := dir_to_player()
 	velocity = dir * speed
 	move_and_slide()
 
@@ -82,8 +92,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		_play_animation(&"idle")
 
-func _update_facing(target: Vector2) -> void:
-	sprite.flip_h = target.x < global_position.x
+
 
 func _start_attack() -> void:
 	_attacking = true
@@ -92,9 +101,9 @@ func _start_attack() -> void:
 func _on_attack_anim_finished() -> void:
 	if _dying:
 		return
-	if _distance_to_player_sq() <= attack_range * attack_range:
-		if _player.has_method(&"take_damage"):
-			_player.take_damage(1)
+	if distance_to_player_sq() <= attack_range * attack_range:
+		if player.has_method(&"take_damage"):
+			player.take_damage(1)
 	_attacking = false
 	_attack_cd_remaining = attack_cooldown
 	sprite.play(&"idle")
@@ -114,8 +123,8 @@ func _play_hurt_flash() -> void:
 		_hurt_tween.kill()
 	_hurt_tween = create_tween()
 	_hurt_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	sprite.modulate = HURT_FLASH_PEAK
-	_hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
+	sprite.modulate = hurt_flash_color
+	_hurt_tween.tween_property(sprite, "modulate", Color.WHITE, hurt_flash_duration)
 
 func _update_healthbar() -> void:
 	healthbar.value = float(_health) / max_health * 100
@@ -136,7 +145,15 @@ func _on_die_anim_finished() -> void:
 	xp_orb.setup(xp_reward)
 	Pools.despawn(self)
 
+func _reset():
+	speed = data.speed
+	attack_range = data.attack_range
+	attack_cooldown = data.attack_cooldown
+	xp_reward = data.xp_reward
+	max_health = data.health
+
 func _on_spawn() -> void:
+	_reset()
 	_health = max_health
 	healthbar.visible = false
 	_dying = false

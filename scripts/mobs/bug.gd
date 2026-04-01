@@ -17,11 +17,11 @@ func _physics_process(delta: float) -> void:
 	if _dying:
 		return
 
-	_update_facing(_player.global_position)
+	update_facing(player.global_position)
 
 	_time_since_last_shot += delta
 
-	var dist_sq := _distance_to_player_sq()
+	var dist_sq := distance_to_player_sq()
 
 	# Start firing if in range and not already firing
 	if dist_sq <= stop_range * stop_range:
@@ -35,7 +35,7 @@ func _physics_process(delta: float) -> void:
 			_play_animation(&"idle")
 		return
 
-	var dir := _dir_to_player()
+	var dir := dir_to_player()
 	velocity = dir * speed
 	move_and_slide()
 	if velocity.length_squared() > 0.0001:
@@ -45,8 +45,8 @@ func _physics_process(delta: float) -> void:
 
 func _fire_bullet() -> void:
 	var bullet = Pools.spawn("mob_bullet", global_position)
-	bullet.look_at(_player.global_position)
+	bullet.look_at(player.global_position)
 
 	if bullet.has_method("setup"):
-		var dir = _dir_to_player()
+		var dir = dir_to_player()
 		bullet.setup(dir, bullet_speed)

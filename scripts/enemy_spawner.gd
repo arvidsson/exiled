@@ -73,4 +73,4 @@ func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
 		pos.y = clampf(pos.y, lr.position.y, lr.end.y)
 	var mob_types: Array[String] = ["bug", "lizard", "warrior"]
 	var mob_type: String = mob_types[randi() % mob_types.size()]
-	Pools.spawn(Data.get_mob_data(mob_type).scene.resource_path.get_file().get_basename(), pos)
+	Pools.spawn(mob_type, pos)
