@@ -1,0 +1,9 @@
+{
+  "file_scan_exclusions": [
+    "**/*.uid",
+    "**/*.import",
+    ".git/",
+    ".godot",
+    "build/",
+  ],
+}

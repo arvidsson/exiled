@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cjnddsux8u1av"]
+
+[ext_resource type="Script" uid="uid://hkyyp4gw1nus" path="res://scripts/damage_label.gd" id="1_ovn2n"]
+
+[node name="DamageLabel" type="Label" unique_id=1881345741]
+z_index = 100
+offset_left = -13.0
+offset_top = -7.0000005
+offset_right = 37.0
+offset_bottom = 23.0
+scale = Vector2(0.4, 0.4)
+pivot_offset = Vector2(25, 15)
+text = "999"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_ovn2n")
