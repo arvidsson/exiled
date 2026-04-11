@@ -1,13 +1,10 @@
 [gd_scene format=3 uid="uid://brpqs6g30un30"]
 
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_amwun"]
+[ext_resource type="Script" uid="uid://0lfwu4i2y1oy" path="res://scripts/mobs/warrior.gd" id="2_058h0"]
 [ext_resource type="Resource" uid="uid://dme3r7rkupei7" path="res://data/mobs/warrior.tres" id="2_tvbsx"]
 
 [node name="Warrior" unique_id=954850513 instance=ExtResource("1_amwun")]
+script = ExtResource("2_058h0")
 data = ExtResource("2_tvbsx")
-attack_range = 32.0
-attack_cooldown = 1.2
 xp_reward = 50
-max_health = 10
-hurt_flash_color = Color(5, 5, 5, 1)
-hurt_flash_duration = 0.12

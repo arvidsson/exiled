@@ -3,13 +3,13 @@ class_name MobSkill
 
 @export var cooldown: float = 1.0
 
-var _cooldown_remaining := 0.0
+var remaining := 0.0
 
 func can_use(mob: Mob) -> bool:
-	return _cooldown_remaining <= 0.0
+	return remaining <= 0.0 and not mob.dying
 
 func use(mob: Mob) -> void:
-	_cooldown_remaining = cooldown
+	remaining = cooldown
 	_execute(mob)
 
 func _execute(mob: Mob) -> void:
@@ -17,5 +17,5 @@ func _execute(mob: Mob) -> void:
 	pass
 
 func process(delta: float) -> void:
-	if _cooldown_remaining > 0.0:
-		_cooldown_remaining -= delta
+	if remaining > 0.0:
+		remaining -= delta

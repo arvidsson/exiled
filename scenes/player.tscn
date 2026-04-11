@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c3e4l87l5xwal" path="res://scripts/player.gd" id="1_fjrip"]
 [ext_resource type="Texture2D" uid="uid://pvlxxom8k5i4" path="res://sprites/player/die.png" id="2_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://dhvqcyrnbd8ng" path="res://sprites/player/idle_up.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://b82ikpvh4csow" path="res://sprites/shadow.png" id="2_jej6c"]
 [ext_resource type="Texture2D" uid="uid://hngpuyyghv2j" path="res://sprites/player/idle_right.png" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://c0yf8ym8kq04i" path="res://sprites/player/move_down.png" id="4_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://bxervwhlj7uem" path="res://sprites/player/move_right.png" id="5_fjrip"]
@@ -738,6 +739,9 @@ radius = 4.0
 collision_layer = 2
 script = ExtResource("1_fjrip")
 max_speed = 50.0
+
+[node name="Shadow" type="Sprite2D" parent="." unique_id=69851431]
+texture = ExtResource("2_jej6c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1597076928]
 position = Vector2(12, -10)

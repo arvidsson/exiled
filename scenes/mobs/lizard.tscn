@@ -130,12 +130,10 @@ animations = [{
 [node name="Lizard" unique_id=954850513 instance=ExtResource("1_gghss")]
 script = ExtResource("1_0rgye")
 data = ExtResource("3_ive4f")
-attack_range = 32.0
-attack_cooldown = 1.2
 xp_reward = 50
-max_health = 10
-hurt_flash_color = Color(5, 5, 5, 1)
-hurt_flash_duration = 0.12
 
-[node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1362614468]
 sprite_frames = SubResource("SpriteFrames_0rgye")
+
+[node name="DamageLabelSpawn" parent="." index="4" unique_id=1379598192]
+position = Vector2(0, -16)

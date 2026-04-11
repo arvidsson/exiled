@@ -94,11 +94,19 @@ animations = [{
 
 [node name="Bug" unique_id=954850513 instance=ExtResource("1_lnsdk")]
 script = ExtResource("1_ye8fc")
-fire_rate = 0.5
-stop_range = 150.0
-bullet_speed = 200.0
 data = ExtResource("3_7r3fo")
 xp_reward = 50
 
-[node name="AnimatedSprite2D" parent="." index="0" unique_id=1362614468]
+[node name="Shadow" parent="." index="0" unique_id=14050490]
+position = Vector2(0, 9)
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1362614468]
 sprite_frames = SubResource("SpriteFrames_ye8fc")
+animation = &"attack"
+
+[node name="HealthBar" parent="." index="3" unique_id=253243207]
+offset_top = -23.0
+offset_bottom = -22.0
+
+[node name="DamageLabelSpawn" parent="." index="4" unique_id=1379598192]
+position = Vector2(-2, -16)

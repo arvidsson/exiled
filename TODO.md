@@ -1,11 +1,17 @@
 - mob:
 - refactor so physics_process handles all stuff, move_towards_player()
 - hooks: on_death, on_take_damage,
-
+- one melee enemy (with proper swing fx)
+  - one slow but tanky
+  - one fast but weak
+- one ranged enemy
+  - one that circles around and shoots from distance
+  - one sniper? far off
+  - one that strafes away from shots
+- player shooting: quick long lines
 - reload weapon, only when trying to shoot with zero ammo?
 - ammo
-- shadows under entities
-- sounds
+- sounds (what are missing?)
 - enemy has hp
 - bullet/weapon does damage amount
 - regen

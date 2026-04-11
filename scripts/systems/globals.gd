@@ -1,5 +1,8 @@
 extends Node
 
+func _ready() -> void:
+	print("[Globals] ready")
+
 enum CollisionLayer {
 	WORLD = 1 << 0,
 	PLAYER = 1 << 1,

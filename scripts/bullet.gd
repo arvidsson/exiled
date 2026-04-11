@@ -1,56 +1,63 @@
 extends Area2D
+class_name Bullet
 
-@export var speed: float = 300.0
 @export var lifetime: float = 3.0
 
 var velocity := Vector2.ZERO
-var _spent := false
-var _lifetime_delay: SceneTreeTimer
-var _damage: int = 1
+var dead := false
+var lifetime_delay: SceneTreeTimer
+var damage: int = 1
+
+static func create(position: Vector2, direction: Vector2, speed: float, damage: float) -> Bullet:
+	var bullet := Pools.spawn(Data.Scenes.Bullet, position)
+	bullet.setup(direction, speed, damage)
+	return bullet
+
+static func create_mob(position: Vector2, direction: Vector2, speed: float, damage: float) -> Bullet:
+	var bullet := Pools.spawn(Data.Scenes.MobBullet, position)
+	bullet.setup(direction, speed, damage)
+	return bullet
+
+func setup(direction: Vector2, speed: float, damage: int = 1) -> void:
+	velocity = direction.normalized() * speed
+	self.damage = damage
 
 func _ready() -> void:
-	if not body_entered.is_connected(_on_body_entered):
-		body_entered.connect(_on_body_entered)
+	pass
+
+func _on_body_entered(body: Node2D) -> void:
+	if dead:
+		return
+	if body.has_method(&"take_damage"):
+		dead = true
+		call_deferred(&"_apply_hit", body)
 
 func _on_spawn() -> void:
 	_cancel_lifetime_delay()
-	_spent = false
-	_lifetime_delay = Tools.call_delay(self , lifetime, _on_lifetime_ended)
+	dead = false
+	lifetime_delay = Tools.call_delay(self , lifetime, _on_lifetime_ended)
 
 func _on_despawn() -> void:
 	_cancel_lifetime_delay()
 
-func _cancel_lifetime_delay() -> void:
-	if _lifetime_delay == null:
-		return
-	if _lifetime_delay.timeout.is_connected(_on_lifetime_ended):
-		_lifetime_delay.timeout.disconnect(_on_lifetime_ended)
-	_lifetime_delay = null
-
 func _on_lifetime_ended() -> void:
-	_lifetime_delay = null
-	if _spent:
+	lifetime_delay = null
+	if dead:
 		return
-	_spent = true
+	dead = true
 	Pools.despawn(self)
-
-func setup(direction: Vector2, move_speed: float, damage: int = 1) -> void:
-	velocity = direction.normalized() * move_speed
-	_damage = damage
 
 func _physics_process(delta: float) -> void:
 	global_position += velocity * delta
 
-func _on_body_entered(body: Node2D) -> void:
-	if _spent:
+func _cancel_lifetime_delay() -> void:
+	if lifetime_delay == null:
 		return
-	if body.has_method(&"take_damage"):
-		_spent = true
-		# body_entered runs while physics queries flush; reparenting/spawning
-		# CollisionObject2D (e.g. XP orb Area2D) must happen after that.
-		call_deferred(&"_apply_hit", body)
+	if lifetime_delay.timeout.is_connected(_on_lifetime_ended):
+		lifetime_delay.timeout.disconnect(_on_lifetime_ended)
+	lifetime_delay = null
 
 func _apply_hit(body: Node2D) -> void:
 	if is_instance_valid(body) and body.has_method(&"take_damage"):
-		body.take_damage(_damage)
+		body.take_damage(damage)
 	Pools.despawn(self)

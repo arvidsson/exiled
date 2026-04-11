@@ -9,6 +9,7 @@ var _music_player: AudioStreamPlayer
 var _rng := RandomNumberGenerator.new()
 
 func _ready():
+	print("[Audio] ready")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_rng.randomize()
 

@@ -194,15 +194,15 @@ func _sync_ammo_label() -> void:
 	Events.ammo_changed.emit(ammo, magazine_size)
 
 func _start_reload() -> void:
+	Audio.play_sfx(Data.Sounds.Reload)
 	if _reloading or ammo >= magazine_size:
 		return
 	_reloading = true
 	_reload_remaining = reload_duration_sec
 
 func _fire() -> void:
-	var bullet := Pools.spawn("bullet", muzzle.global_position) as Area2D
-	bullet.setup(muzzle.global_transform.x, bullet_speed, damage)
-	Audio.play_sfx(Data.get_sound("shoot"))
+	Bullet.create(muzzle.global_position, muzzle.global_transform.x, bullet_speed, damage)
+	Audio.play_sfx(Data.Sounds.Shoot)
 
 func _play_roll_anim(dir: Vector2) -> void:
 	var anim: String

@@ -71,6 +71,6 @@ func _spawn_one_on_ring(center: Vector2, cam: Camera2D) -> void:
 		var lr: Rect2 = $"../Level".level_rect
 		pos.x = clampf(pos.x, lr.position.x, lr.end.x)
 		pos.y = clampf(pos.y, lr.position.y, lr.end.y)
-	var mob_types: Array[String] = ["bug", "lizard", "warrior"]
-	var mob_type: String = mob_types[randi() % mob_types.size()]
+	var mob_types: Array[PackedScene] = [Data.Mobs.Bug, Data.Mobs.Lizard, Data.Mobs.Warrior]
+	var mob_type: PackedScene = mob_types[randi() % mob_types.size()]
 	Pools.spawn(mob_type, pos)

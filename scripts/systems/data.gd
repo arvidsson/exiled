@@ -1,59 +1,25 @@
 extends Node
 
-@export var scenes: Array[PackedScene] = []
-@export var sounds: Array[AudioStream] = []
-@export var music: Array[AudioStream] = []
+func _ready() -> void:
+	print("[Data] ready")
 
-var _scenes_lookup: Dictionary[String, PackedScene] = {}
-var _sounds_lookup: Dictionary[String, AudioStream] = {}
-var _music_lookup: Dictionary[String, AudioStream] = {}
+class Mobs:
+	static var Bug: PackedScene = load("uid://dw6i8s0i62np2")
+	static var Lizard: PackedScene = load("uid://cr74oa801on3x")
+	static var Warrior: PackedScene = load("uid://brpqs6g30un30")
 
-func _ready():
-	_build_scenes_lookup()
-	_build_sounds_lookup()
-	_build_music_lookup()
+class Scenes:
+	static var XpPickup: PackedScene = load("uid://bg4ey3x532mxi")
+	static var Bullet: PackedScene = load("uid://y3manbrwbttw")
+	static var MobBullet: PackedScene = load("uid://r3sd2tgxs5li")
 
-func get_scene(name: String) -> PackedScene:
-	if not _scenes_lookup.has(name):
-		push_warning("[Data] Scene not found: %s" % name)
-		return null
-	return _scenes_lookup[name]
+class FX:
+	static var DamageLabel: PackedScene = load("uid://cjnddsux8u1av")
 
-func get_sound(name: String) -> AudioStream:
-	if not _sounds_lookup.has(name):
-		push_warning("[Data] Sound not found: %s" % name)
-		return null
-	return _sounds_lookup[name]
+class Sounds:
+	static var Hurt: AudioStream = load("uid://dkr3n0efaj0lc")
+	static var Shoot: AudioStream = load("uid://cs0iuyy7ky0is")
+	static var Reload: AudioStream = load("uid://c21fo2s5r3ywm")
 
-func get_music(name: String) -> AudioStream:
-	if not _music_lookup.has(name):
-		push_warning("[Data] Music not found: %s" % name)
-		return null
-	return _music_lookup[name]
-
-func _build_scenes_lookup():
-	_scenes_lookup.clear()
-	for s in scenes:
-		var name := s.resource_path.get_file().get_basename()
-		if name == "":
-			push_warning("[Data] Scene missing resource_name:", s)
-			continue
-		_scenes_lookup[name] = s
-
-func _build_sounds_lookup():
-	_sounds_lookup.clear()
-	for snd in sounds:
-		var name := snd.resource_path.get_file().get_basename()
-		if name == "":
-			push_warning("[Data] Sound missing name: %s" % snd)
-			continue
-		_sounds_lookup[name] = snd
-
-func _build_music_lookup():
-	_music_lookup.clear()
-	for m in music:
-		var name := m.resource_path.get_file().get_basename()
-		if name == "":
-			push_warning("[Data] Music missing name: %s" % m)
-			continue
-		_music_lookup[name] = m
+class Music:
+	static var Default: AudioStream = load("uid://5kbn2v4ysu3v")

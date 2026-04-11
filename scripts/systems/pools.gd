@@ -1,6 +1,9 @@
 extends Node
 
-var _pools: Dictionary[String, Pool] = {}
+func _ready() -> void:
+	print("[Pools] ready")
+
+var _pools: Dictionary[PackedScene, Pool] = {}
 
 class Pool:
 	extends Node
@@ -73,18 +76,20 @@ func clear():
 
 func register(scene: PackedScene, parent: Node, pool_size: int = 10):
 	var scene_name: String = scene.resource_path.get_file().get_basename()
-	if _pools.has(scene_name):
+	if _pools.has(scene):
 		push_warning("[Pools] Pool already exists for:", scene_name)
 		return
-	_pools[scene_name] = Pool.new(scene, parent, pool_size)
-	add_child(_pools[scene_name])
+	var pool = Pool.new(scene, parent, pool_size)
+	_pools[scene] = pool
+	add_child(pool)
 	print_debug("[Pools] Registered " + scene_name)
 
-func spawn(scene_name: String, position: Vector2 = Vector2.ZERO) -> Node:
-	if not _pools.has(scene_name):
+func spawn(scene: PackedScene, position: Vector2 = Vector2.ZERO) -> Node:
+	var scene_name: String = scene.resource_path.get_file().get_basename()
+	if not _pools.has(scene):
 		push_warning("[Pools] Pool not found for:", scene_name)
 		return null
-	return _pools[scene_name].spawn(position)
+	return _pools[scene].spawn(position)
 
 func despawn(instance: Node) -> void:
 	if instance.has_meta("_pool"):

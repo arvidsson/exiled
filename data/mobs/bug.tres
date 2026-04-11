@@ -2,10 +2,28 @@
 
 [ext_resource type="Script" uid="uid://cg577v8dg55pn" path="res://scripts/data/mob_data.gd" id="2_oycof"]
 [ext_resource type="Script" uid="uid://yv4ndg1kommo" path="res://scripts/mobs/skills/mob_skill.gd" id="3_gm0jy"]
+[ext_resource type="Script" uid="uid://c2xn7mfdie44n" path="res://scripts/data/range_int.gd" id="3_oycof"]
+[ext_resource type="Script" uid="uid://bggw2eqbgwpiy" path="res://scripts/mobs/skills/ranged_attack_mob_skill.gd" id="4_gm0jy"]
+
+[sub_resource type="Resource" id="Resource_rcrqd"]
+script = ExtResource("3_oycof")
+min = 5
+max = 10
+metadata/_custom_type_script = "uid://c2xn7mfdie44n"
+
+[sub_resource type="Resource" id="Resource_mu60g"]
+script = ExtResource("4_gm0jy")
+range = 150.0
+damage = SubResource("Resource_rcrqd")
+animation = "attack"
+bullet_speed = 180.0
+cooldown = 2.0
+metadata/_custom_type_script = "uid://bggw2eqbgwpiy"
 
 [resource]
 resource_name = "bug"
 script = ExtResource("2_oycof")
 speed = 30.0
-xp_reward = 50
+health = 5
+skills = Array[ExtResource("3_gm0jy")]([SubResource("Resource_mu60g")])
 metadata/_custom_type_script = "uid://cg577v8dg55pn"

@@ -17,3 +17,5 @@ shape = SubResource("CircleShape2D_bullet")
 scale = Vector2(0.5, 0.5)
 color = Color(1, 0, 0.2, 1)
 polygon = PackedVector2Array(-3, -3, 3, -3, 2.999999, -0.0078086853, 3, 3, -3, 3)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
