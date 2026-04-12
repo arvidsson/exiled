@@ -3,6 +3,7 @@ class_name Player
 
 @export var max_speed: float
 @export var bullet_speed: float = 300.0
+@export var primary_spread_deg: float = 5.0
 # Secondary / burst attack settings
 @export var burst_count: int = 3
 @export var burst_interval_sec: float = 0.06
@@ -193,6 +194,7 @@ func _secondary_fire() -> void:
 	# Damage and crit calculation (same as primary)
 	Events.skill_used.emit(Globals.Skill.SECONDARY, secondary_cooldown_sec)
 	var dmg := damage.get_random()
+	dmg = int(dmg / 2.0)
 	var is_crit := randf() < crit_chance
 	if is_crit:
 		dmg = round(dmg * crit_multiplier)
@@ -205,9 +207,9 @@ func _secondary_fire() -> void:
 		Tools.call_delay(self, i * burst_interval_sec, func() -> void:
 			var d := base_dir.rotated(randf_range(-spread_rad, spread_rad))
 			Bullet.create(muzzle.global_position, d, secondary_bullet_speed, dmg, secondary_knockback)
+			Audio.play_sfx(Data.Sounds.Shoot)
 		)
 
-	Audio.play_sfx(Data.Sounds.Shoot)
 
 func _start_roll() -> void:
 	current_stamina = maxf(0.0, current_stamina - roll_stamina_cost)
@@ -256,7 +258,11 @@ func _fire() -> void:
 	if is_crit:
 		dmg = round(dmg * crit_multiplier)
 
-	Bullet.create(muzzle.global_position, muzzle.global_transform.x, bullet_speed, dmg)
+	# Apply small random spread to primary fire
+	var base_dir: Vector2 = muzzle.global_transform.x
+	var spread_rad := primary_spread_deg * PI / 180.0
+	var d := base_dir.rotated(randf_range(-spread_rad, spread_rad))
+	Bullet.create(muzzle.global_position, d, bullet_speed, dmg, 0.0)
 	Audio.play_sfx(Data.Sounds.Shoot)
 
 func _play_roll_anim(dir: Vector2) -> void:
