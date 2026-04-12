@@ -7,6 +7,8 @@ class_name Mob
 @export var attack_cooldown: float = 1.2
 @export var xp_reward: int = 10
 @export var max_health: int = 10
+@export var drop_chance: float = 0.6 # chance to drop anything on death
+@export var ammo_chance: float = 0.2 # given a drop, chance it's ammo instead of XP
 @export var hurt_flash_color := Color(5, 5, 5)
 @export var hurt_flash_duration := 0.12
 
@@ -99,8 +101,16 @@ func _die() -> void:
 	play_animation_once(&"die", _on_die_anim_finished)
 
 func _on_die_anim_finished() -> void:
-	var xp_orb = Pools.spawn(Data.Scenes.XpPickup, global_position) as XPPickup
-	xp_orb.setup(xp_reward)
+	# Chance to drop something on death
+	if randf() < drop_chance:
+		# Small chance that the drop is ammo instead of XP
+		if randf() < ammo_chance:
+			var ammo_drop = Pools.spawn(Data.Scenes.Ammo, global_position) as Ammo
+			# Give ammo proportional to xp_reward (at least 1)
+			ammo_drop.setup(max(1, int(xp_reward / 2)))
+		else:
+			var xp_orb = Pools.spawn(Data.Scenes.XpPickup, global_position) as XPPickup
+			xp_orb.setup(xp_reward)
 	Pools.despawn(self)
 
 func _reset():

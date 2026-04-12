@@ -10,6 +10,7 @@ class Mobs:
 
 class Scenes:
 	static var XpPickup: PackedScene = load("uid://bg4ey3x532mxi")
+	static var Ammo: PackedScene = load("uid://qekw3wgen1e7")
 	static var Bullet: PackedScene = load("uid://y3manbrwbttw")
 	static var MobBullet: PackedScene = load("uid://r3sd2tgxs5li")
 

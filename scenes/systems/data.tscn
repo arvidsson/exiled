@@ -1,18 +1,6 @@
 [gd_scene format=3 uid="uid://bbmor7s6vn267"]
 
-[ext_resource type="Script" uid="uid://bh5gebge6imy8" path="res://scripts/systems/data.gd" id="1_2lsid"]
-[ext_resource type="PackedScene" uid="uid://bg4ey3x532mxi" path="res://scenes/xp_pickup.tscn" id="4_4dw0s"]
-[ext_resource type="PackedScene" uid="uid://y3manbrwbttw" path="res://scenes/bullet.tscn" id="5_5rkdf"]
-[ext_resource type="PackedScene" uid="uid://dw6i8s0i62np2" path="res://scenes/mobs/bug.tscn" id="5_kdk40"]
-[ext_resource type="AudioStream" uid="uid://cs0iuyy7ky0is" path="res://sfx/shoot.wav" id="6_1b46n"]
-[ext_resource type="PackedScene" uid="uid://cr74oa801on3x" path="res://scenes/mobs/lizard.tscn" id="6_nrj2e"]
-[ext_resource type="PackedScene" uid="uid://r3sd2tgxs5li" path="res://scenes/mob_bullet.tscn" id="6_x6xvh"]
-[ext_resource type="PackedScene" uid="uid://brpqs6g30un30" path="res://scenes/mobs/warrior.tscn" id="7_mhgx2"]
-[ext_resource type="AudioStream" uid="uid://dkr3n0efaj0lc" path="res://sfx/hurt.wav" id="7_x6xvh"]
-[ext_resource type="AudioStream" uid="uid://5kbn2v4ysu3v" path="res://sfx/music.mp3" id="8_kdk40"]
+[ext_resource type="Script" uid="uid://bh5gebge6imy8" path="res://scripts/autoloads/data.gd" id="1_2lsid"]
 
 [node name="Data" type="Node" unique_id=16236980]
 script = ExtResource("1_2lsid")
-scenes = Array[PackedScene]([ExtResource("4_4dw0s"), ExtResource("5_5rkdf"), ExtResource("6_x6xvh"), ExtResource("5_kdk40"), ExtResource("6_nrj2e"), ExtResource("7_mhgx2")])
-sounds = Array[AudioStream]([ExtResource("6_1b46n"), ExtResource("7_x6xvh")])
-music = Array[AudioStream]([ExtResource("8_kdk40")])

@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://n8xiajk0ng77" path="res://sprites/player/idle_down.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c3e4l87l5xwal" path="res://scripts/player.gd" id="1_fjrip"]
 [ext_resource type="Texture2D" uid="uid://pvlxxom8k5i4" path="res://sprites/player/die.png" id="2_3v2ag"]
+[ext_resource type="Script" uid="uid://c2xn7mfdie44n" path="res://scripts/data/range_int.gd" id="2_f1ej7"]
 [ext_resource type="Texture2D" uid="uid://dhvqcyrnbd8ng" path="res://sprites/player/idle_up.png" id="2_g2els"]
 [ext_resource type="Texture2D" uid="uid://b82ikpvh4csow" path="res://sprites/shadow.png" id="2_jej6c"]
 [ext_resource type="Texture2D" uid="uid://hngpuyyghv2j" path="res://sprites/player/idle_right.png" id="2_qhqgy"]
@@ -13,6 +14,12 @@
 [ext_resource type="PackedScene" uid="uid://bt0q4cyijk1fp" path="res://scenes/gun.tscn" id="8_smehm"]
 [ext_resource type="Texture2D" uid="uid://b2g5l7bhbbxiy" path="res://sprites/player/roll_right.png" id="9_3v2ag"]
 [ext_resource type="Texture2D" uid="uid://cmero2mk7e5h6" path="res://sprites/player/roll_up.png" id="10_jej6c"]
+
+[sub_resource type="Resource" id="Resource_oprun"]
+script = ExtResource("2_f1ej7")
+min = 3
+max = 5
+metadata/_custom_type_script = "uid://c2xn7mfdie44n"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jx8is"]
 atlas = ExtResource("2_3v2ag")
@@ -739,6 +746,8 @@ radius = 4.0
 collision_layer = 2
 script = ExtResource("1_fjrip")
 max_speed = 50.0
+damage = SubResource("Resource_oprun")
+crit_chance = 0.5
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=69851431]
 texture = ExtResource("2_jej6c")

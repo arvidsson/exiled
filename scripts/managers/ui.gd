@@ -16,10 +16,10 @@ extends CanvasLayer
 
 var upgrade_pool = [
 	{"name":"Increase Health","apply":func(p): p.max_hp += 5; p.current_hp += 5},
-	{"name":"Increase Damage","apply":func(p): p.damage += 5},
+	{"name":"Increase Damage","apply":func(p): p.damage += 5}, # BUG
 	{"name":"Increase Speed","apply":func(p): p.max_speed += 10},
 	{"name":"Stamina Regen","apply":func(p): p.stamina_regen_per_sec += 5},
-	{"name":"Increase Ammo","apply":func(p): p.magazine_size += 3; p.ammo += 3},
+	{"name":"Increase Ammo","apply":func(p): p.magazine_size += 3; p.total_ammo += 3},
 ]
 
 var current_choices = []

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c4wl278mg4npe"]
 
-[ext_resource type="Script" uid="uid://cjpd7rw6rnp6w" path="res://scripts/mob.gd" id="1_bsing"]
+[ext_resource type="Script" uid="uid://cjpd7rw6rnp6w" path="res://scripts/mobs/mob.gd" id="1_bsing"]
 [ext_resource type="Texture2D" uid="uid://b82ikpvh4csow" path="res://sprites/shadow.png" id="2_71rcx"]
 [ext_resource type="Texture2D" uid="uid://c30uooim0ko8e" path="res://sprites/enemy/warrior.png" id="2_d4cuo"]
 

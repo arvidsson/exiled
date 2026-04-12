@@ -10,10 +10,11 @@ class_name Player
 @export var max_hp: int = 2
 @export var xp_per_level: float = 100.0
 @export var magazine_size: int = 6
-@export var fire_interval_sec: float = 0.2
-@export var reload_duration_sec: float = 1.0
-
-var damage:int = 3
+@export var fire_interval_sec: float = 0.2 # fire_speed
+@export var reload_duration_sec: float = 1.0 # reload_speed
+@export var damage: RangeInt
+@export var crit_chance: float = 0.01
+@export var crit_multiplier: float = 1.5
 
 const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
@@ -28,6 +29,7 @@ var current_xp: float = 0.0
 var player_level: int = 1
 var _hurt_tween: Tween
 var ammo: int
+var total_ammo: int
 var _reloading := false
 var _reload_remaining: float = 0.0
 var _fire_cooldown: float = 0.0
@@ -40,6 +42,7 @@ func _ready() -> void:
 	current_stamina = max_stamina
 	current_hp = max_hp
 	ammo = magazine_size
+	total_ammo = magazine_size * 2
 	call_deferred(&"_sync_xp_bar")
 	call_deferred(&"_sync_hp_label")
 	call_deferred(&"_sync_ammo_label")
@@ -148,7 +151,12 @@ func _physics_process(delta: float) -> void:
 		_reload_remaining -= delta
 		if _reload_remaining <= 0.0:
 			_reloading = false
-			ammo = magazine_size
+			# Transfer bullets from reserve (total_ammo) to the magazine
+			var needed: int = magazine_size - ammo
+			var to_load: int = min(needed, total_ammo)
+			if to_load > 0:
+				ammo += to_load
+				total_ammo -= to_load
 			_fire_cooldown = fire_interval_sec
 
 	if not _reloading:
@@ -191,17 +199,28 @@ func _sync_hp_label() -> void:
 	Events.hp_changed.emit(current_hp, max_hp)
 
 func _sync_ammo_label() -> void:
-	Events.ammo_changed.emit(ammo, magazine_size)
+	Events.ammo_changed.emit(ammo, total_ammo)
 
 func _start_reload() -> void:
 	Audio.play_sfx(Data.Sounds.Reload)
-	if _reloading or ammo >= magazine_size:
+	if _reloading or ammo >= magazine_size or total_ammo <= 0:
 		return
 	_reloading = true
 	_reload_remaining = reload_duration_sec
 
+func add_ammo(amount: int) -> void:
+	if amount <= 0:
+		return
+	total_ammo += amount
+	_sync_ammo_label()
+
 func _fire() -> void:
-	Bullet.create(muzzle.global_position, muzzle.global_transform.x, bullet_speed, damage)
+	var dmg := damage.get_random()
+	var is_crit := randf() < crit_chance
+	if is_crit:
+		dmg = round(dmg * crit_multiplier)
+
+	Bullet.create(muzzle.global_position, muzzle.global_transform.x, bullet_speed, dmg)
 	Audio.play_sfx(Data.Sounds.Shoot)
 
 func _play_roll_anim(dir: Vector2) -> void:

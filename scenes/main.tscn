@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
 [ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
+[ext_resource type="PackedScene" uid="uid://bdgce3amc0h0v" path="res://scenes/ui/mouse.tscn" id="9_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://cdygoa44b23lp" path="res://scenes/level/grass.tscn" id="10_dp3eg"]
 [ext_resource type="Script" uid="uid://dw8wo2ong6uwo" path="res://scripts/enemy_spawner.gd" id="10_spawn"]
 [ext_resource type="PackedScene" uid="uid://bbvjcp5vnrlvj" path="res://scenes/level/grass2.tscn" id="11_0ld40"]
@@ -129,6 +130,8 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "THIS IS A asd"
 autowrap_mode = 2
+
+[node name="Mouse" parent="UI" unique_id=1195429480 instance=ExtResource("9_jbj1t")]
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=2077478281]
 script = ExtResource("10_spawn")

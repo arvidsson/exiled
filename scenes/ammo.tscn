@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://qekw3wgen1e7"]
+
+[ext_resource type="Script" uid="uid://cbjboeboqnyjt" path="res://scripts/pickups/ammo.gd" id="1_8affh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xp"]
+radius = 2.0
+
+[node name="Ammo" type="Area2D" unique_id=854012917]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_8affh")
+magnet_radius = 40.0
+lifetime = 30.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=554229849]
+shape = SubResource("CircleShape2D_xp")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1648761196]
+scale = Vector2(0.5, 0.5)
+color = Color(0.09550918, 0.7593557, 0.43750772, 1)
+polygon = PackedVector2Array(-3, -3, 3, -3, 2.999999, -0.0078086853, 3, 3, -3, 3)
