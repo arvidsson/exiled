@@ -16,7 +16,7 @@ func _physics_process(delta: float) -> void:
 			skill.use(self)
 			return
 
-	move_towards(player.global_position)
+	move_towards(player.global_position, delta)
 
 	if velocity.length_squared() > 0.0001:
 		play_animation(&"move")

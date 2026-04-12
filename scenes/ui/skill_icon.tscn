@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://u57tywn1emdc"]
+
+[ext_resource type="Texture2D" uid="uid://cikhekc80yjka" path="res://icon.svg" id="1_4t5pt"]
+[ext_resource type="Texture2D" uid="uid://ck52f0hw5nnke" path="res://sprites/essentials/4×4 Pixels/pixel-white.png" id="2_445uv"]
+[ext_resource type="Script" uid="uid://b76q7vnhd3x81" path="res://scripts/ui/skill_icon.gd" id="2_c20cg"]
+
+[node name="SkillIcon" type="TextureButton" unique_id=1180353922]
+custom_minimum_size = Vector2(25, 25)
+offset_right = 50.0
+offset_bottom = 50.0
+texture_normal = ExtResource("1_4t5pt")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("2_c20cg")
+
+[node name="ProgressBar" type="TextureProgressBar" parent="." unique_id=184346778]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.05
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = ExtResource("2_445uv")
+tint_progress = Color(0.32941177, 0.32941177, 0.32941177, 0.6862745)

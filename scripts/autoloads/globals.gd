@@ -10,3 +10,10 @@ enum CollisionLayer {
 	PLAYER_ATTACK = 1 << 3,
 	MOB_ATTACK = 1 << 4
 }
+
+enum Skill {
+	PRIMARY,
+	SECONDARY,
+	UTILITY,
+	SPECIAL
+}

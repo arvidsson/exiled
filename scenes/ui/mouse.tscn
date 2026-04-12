@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bdgce3amc0h0v"]
 
 [ext_resource type="Texture2D" uid="uid://n2cju6v61fe5" path="res://sprites/ui/crosshair007.png" id="1_n1gy4"]
-[ext_resource type="Script" uid="uid://dtuqtjaych8my" path="res://scripts/mouse.gd" id="2_n1gy4"]
+[ext_resource type="Script" uid="uid://dtuqtjaych8my" path="res://scripts/ui/mouse.gd" id="2_n1gy4"]
 
 [node name="Mouse" type="Sprite2D" unique_id=1195429480]
 z_index = 4096

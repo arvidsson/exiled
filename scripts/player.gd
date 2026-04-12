@@ -3,6 +3,14 @@ class_name Player
 
 @export var max_speed: float
 @export var bullet_speed: float = 300.0
+# Secondary / burst attack settings
+@export var burst_count: int = 3
+@export var burst_interval_sec: float = 0.06
+@export var burst_spread_deg: float = 6.0
+@export var secondary_bullet_speed: float = 300.0
+@export var secondary_knockback: float = 120.0
+@export var secondary_cooldown_sec: float = 1.5
+
 @export var roll_speed_mult: float = 1.5
 @export var max_stamina: float = 100.0
 @export var stamina_regen_per_sec: float = 25.0
@@ -33,6 +41,7 @@ var total_ammo: int
 var _reloading := false
 var _reload_remaining: float = 0.0
 var _fire_cooldown: float = 0.0
+var _secondary_cooldown: float = 0.0
 
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
@@ -147,6 +156,7 @@ func _physics_process(delta: float) -> void:
 	gun.z_index = -1 if facing_up else 1
 
 	_fire_cooldown = maxf(0.0, _fire_cooldown - delta)
+	_secondary_cooldown = maxf(0.0, _secondary_cooldown - delta)
 	if _reloading:
 		_reload_remaining -= delta
 		if _reload_remaining <= 0.0:
@@ -170,9 +180,34 @@ func _physics_process(delta: float) -> void:
 		ammo -= 1
 		_fire_cooldown = fire_interval_sec
 
+	# Secondary burst attack (bind an input action named "shoot_secondary")
+	if Input.is_action_just_pressed("secondary") and _secondary_cooldown <= 0.0:
+		_secondary_fire()
+		_secondary_cooldown = secondary_cooldown_sec
+
 	_sync_stamina_bar()
 	_sync_hp_label()
 	_sync_ammo_label()
+
+func _secondary_fire() -> void:
+	# Damage and crit calculation (same as primary)
+	Events.skill_used.emit(Globals.Skill.SECONDARY, secondary_cooldown_sec)
+	var dmg := damage.get_random()
+	var is_crit := randf() < crit_chance
+	if is_crit:
+		dmg = round(dmg * crit_multiplier)
+
+	var base_dir: Vector2 = muzzle.global_transform.x
+	var spread_rad := burst_spread_deg * PI / 180.0
+
+	for i in range(burst_count):
+		# Schedule each bullet closely after the previous one
+		Tools.call_delay(self, i * burst_interval_sec, func() -> void:
+			var d := base_dir.rotated(randf_range(-spread_rad, spread_rad))
+			Bullet.create(muzzle.global_position, d, secondary_bullet_speed, dmg, secondary_knockback)
+		)
+
+	Audio.play_sfx(Data.Sounds.Shoot)
 
 func _start_roll() -> void:
 	current_stamina = maxf(0.0, current_stamina - roll_stamina_cost)
@@ -215,6 +250,7 @@ func add_ammo(amount: int) -> void:
 	_sync_ammo_label()
 
 func _fire() -> void:
+	Events.skill_used.emit(Globals.Skill.PRIMARY, fire_interval_sec)
 	var dmg := damage.get_random()
 	var is_crit := randf() < crit_chance
 	if is_crit:

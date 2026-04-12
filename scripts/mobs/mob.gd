@@ -23,6 +23,13 @@ var attacking := false
 var hurt_tween: Tween
 var skills: Array[MobSkill]
 
+# Knockback handling
+var knockback_velocity: Vector2 = Vector2.ZERO
+@export var knockback_friction: float = 600.0 # magnitude per second to remove from knockback
+
+func apply_knockback(vec: Vector2) -> void:
+	knockback_velocity += vec
+
 func _ready() -> void:
 	if data.skills.size() > 0:
 		for skill in data.skills:
@@ -53,10 +60,15 @@ func dir_to_player() -> Vector2:
 func update_facing(target: Vector2) -> void:
 	sprite.flip_h = target.x < global_position.x
 
-func move_towards(target: Vector2) -> void:
+func move_towards(target: Vector2, delta: float) -> void:
 	var dir := global_position.direction_to(target)
+	# Base movement velocity towards target
 	velocity = dir * speed
+	# Add any active knockback
+	velocity += knockback_velocity
 	move_and_slide()
+	# Decay knockback over time using provided delta
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * delta)
 
 func stop() -> void:
 	velocity = Vector2.ZERO

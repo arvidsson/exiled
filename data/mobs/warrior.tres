@@ -21,6 +21,6 @@ metadata/_custom_type_script = "uid://buc5okxx7ckj0"
 resource_name = "warrior"
 script = ExtResource("2_oienm")
 xp_reward = 50
-health = 10
+health = 50
 skills = Array[ExtResource("3_gex3k")]([SubResource("Resource_fft7c")])
 metadata/_custom_type_script = "uid://cg577v8dg55pn"
