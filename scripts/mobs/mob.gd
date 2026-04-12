@@ -10,6 +10,9 @@ class_name Mob
 @export var drop_chance: float = 0.6 # chance to drop anything on death
 @export var ammo_chance: float = 0.2 # given a drop, chance it's ammo instead of XP
 @export var hurt_flash_color := Color(5, 5, 5)
+@export var sep_radius: float = 24.0
+@export var sep_weight: float = 120.0
+@export var responsiveness: float = 8.0
 @export var hurt_flash_duration := 0.12
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -62,11 +65,42 @@ func update_facing(target: Vector2) -> void:
 
 func move_towards(target: Vector2, delta: float) -> void:
 	var dir := global_position.direction_to(target)
-	# Base movement velocity towards target
-	velocity = dir * speed
+	# Base desired movement velocity towards target
+	var desired := dir * speed
+
+	# Local separation avoidance using a circle query around this mob
+	var sep := Vector2.ZERO
+	var space_state = get_world_2d().direct_space_state
+	var circle = CircleShape2D.new()
+	circle.radius = sep_radius
+	var params = PhysicsShapeQueryParameters2D.new()
+	params.shape = circle
+	params.transform = Transform2D(0, global_position)
+	params.exclude = [self]
+	params.collide_with_bodies = true
+	var results = space_state.intersect_shape(params, 32)
+	for res in results:
+		var body = res.collider
+		if body is Node2D:
+			var to_neigh = global_position - body.global_position
+			var dist = to_neigh.length()
+			if dist > 0 and dist < sep_radius:
+				# stronger repulsion when closer
+				sep += to_neigh.normalized() * ((sep_radius - dist) / sep_radius)
+
+	# Apply separation weight
+	if sep != Vector2.ZERO:
+		desired += sep * sep_weight
+
 	# Add any active knockback
-	velocity += knockback_velocity
+	desired += knockback_velocity
+
+	# Smooth towards desired velocity and clamp
+	velocity = velocity.lerp(desired, clamp(delta * responsiveness, 0.0, 1.0))
+	velocity = velocity.limit_length(speed)
+
 	move_and_slide()
+
 	# Decay knockback over time using provided delta
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, knockback_friction * delta)
 
