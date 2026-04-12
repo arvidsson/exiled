@@ -8,3 +8,6 @@
 script = ExtResource("2_058h0")
 data = ExtResource("2_tvbsx")
 xp_reward = 50
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1362614468]
+animation = &"attack"

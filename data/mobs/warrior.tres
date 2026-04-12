@@ -15,6 +15,7 @@ metadata/_custom_type_script = "uid://c2xn7mfdie44n"
 script = ExtResource("4_pxlnb")
 damage = SubResource("Resource_e075m")
 animation = "attack"
+slash_offset = 16.0
 metadata/_custom_type_script = "uid://buc5okxx7ckj0"
 
 [resource]

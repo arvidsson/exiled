@@ -14,6 +14,7 @@ enum CollisionLayer {
 enum Skill {
 	PRIMARY,
 	SECONDARY,
+	TERTIARY,
 	UTILITY,
 	SPECIAL
 }

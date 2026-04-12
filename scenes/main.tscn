@@ -29,6 +29,7 @@ unique_name_in_owner = true
 roll_speed_mult = 2.0
 stamina_regen_per_sec = 10.0
 roll_stamina_cost = 40.0
+max_hp = 100
 
 [node name="FollowCamera" type="Node2D" parent="." unique_id=742758082 node_paths=PackedStringArray("target", "bounds_source")]
 script = ExtResource("5_fc")

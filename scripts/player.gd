@@ -186,6 +186,12 @@ func _physics_process(delta: float) -> void:
 		_secondary_fire()
 		_secondary_cooldown = secondary_cooldown_sec
 
+	# Tertiary precision shot: single, no spread, max damage, double crit chance
+	if Input.is_action_just_pressed("special_action") and ammo > 0 and _fire_cooldown <= 0.0:
+		_tertiary_fire()
+		ammo -= 1
+		_fire_cooldown = fire_interval_sec
+
 	_sync_stamina_bar()
 	_sync_hp_label()
 	_sync_ammo_label()
@@ -209,6 +215,21 @@ func _secondary_fire() -> void:
 			Bullet.create(muzzle.global_position, d, secondary_bullet_speed, dmg, secondary_knockback)
 			Audio.play_sfx(Data.Sounds.Shoot)
 		)
+
+
+func _tertiary_fire() -> void:
+	# Precision single shot: max damage, double crit chance, no spread
+	Events.skill_used.emit(Globals.Skill.TERTIARY, fire_interval_sec)
+	var dmg := damage.max
+	var double_crit := minf(1.0, crit_chance * 2.0)
+	var is_crit := randf() < double_crit
+	if is_crit:
+		dmg = round(dmg * crit_multiplier)
+
+	var base_dir: Vector2 = muzzle.global_transform.x
+	var d := base_dir
+	Bullet.create(muzzle.global_position, d, bullet_speed, dmg, 0.0)
+	Audio.play_sfx(Data.Sounds.Shoot)
 
 
 func _start_roll() -> void:

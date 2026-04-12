@@ -10,6 +10,7 @@ func _ready() -> void:
 	Pools.register(Data.Mobs.Bug, $Level/MobContainer)
 	Pools.register(Data.Scenes.Bullet, $Level/BulletContainer)
 	Pools.register(Data.Scenes.MobBullet, $Level/BulletContainer)
+	Pools.register(Data.Scenes.Slash, $Level/BulletContainer)
 	Pools.register(Data.Scenes.XpPickup, $Level/XpContainer) # TODO: should be like ItemsContainer or something
 	Pools.register(Data.Scenes.Ammo, $Level/XpContainer)
 	Audio.play_music(Data.Music.Default, -20)

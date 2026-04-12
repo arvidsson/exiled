@@ -13,6 +13,7 @@ class Scenes:
 	static var Ammo: PackedScene = load("uid://qekw3wgen1e7")
 	static var Bullet: PackedScene = load("uid://y3manbrwbttw")
 	static var MobBullet: PackedScene = load("uid://r3sd2tgxs5li")
+	static var Slash: PackedScene = load("uid://cm27yyc7311jg")
 
 class FX:
 	static var DamageLabel: PackedScene = load("uid://cjnddsux8u1av")
