@@ -6,9 +6,9 @@ class_name RollPlayerSkill
 var roll_dir := Vector2.DOWN
 
 func tick(player: Player, delta: float) -> void:
-	super.tick(delta)
+	super.tick(player, delta)
 	player.velocity = roll_dir * player.movement_speed * roll_speed_mult
-	move_and_slide()
+	player.move_and_slide()
 
 func _execute(player: Player) -> void:
 	_start_roll(player)
@@ -20,9 +20,13 @@ func _start_roll(player: Player) -> void:
 	roll_dir = d.normalized()
 	player.gun.hide()
 	_play_roll_anim(player, roll_dir)
-	player.sprite.animation_finished.connect(_on_roll_finished, CONNECT_ONE_SHOT)
+	player.sprite.animation_finished.connect(
+		func():
+			_on_roll_finished(player),
+		CONNECT_ONE_SHOT
+	)
 
-func _on_roll_finished() -> void:
+func _on_roll_finished(player: Player) -> void:
 	player.gun.show()
 
 func _play_roll_anim(player: Player, dir: Vector2) -> void:

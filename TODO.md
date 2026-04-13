@@ -15,6 +15,8 @@ FACTOR: Relics? how could they work
 
 BUGS:
 - knockback doesnt happen during mob attack
+- for now remove the lizard
+- improve melee for warrior so we trigger the slash before attack animation is complete
 
 player stats:
 

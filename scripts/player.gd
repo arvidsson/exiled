@@ -28,6 +28,8 @@ class_name Player
 @export var crit_chance: float = 0.01
 @export var crit_multiplier: float = 1.5
 
+@export var skills: Dictionary[Globals.Skill, PlayerSkill]
+
 const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
 
@@ -147,7 +149,7 @@ func _physics_process(delta: float) -> void:
 	if stamina < max_stamina:
 		stamina = minf(max_stamina, stamina + stamina_regen * delta)
 
-	if Input.is_action_just_pressed("roll") and not rolling and stamina >= roll_stamina_cost:
+	if Input.is_action_just_pressed("utility_action") and not rolling and stamina >= roll_stamina_cost:
 		_start_roll()
 
 	if rolling:
@@ -183,19 +185,19 @@ func _physics_process(delta: float) -> void:
 				total_ammo -= to_load
 			fire_cooldown = fire_interval_sec
 
-	if not reloading:
+	if not reloading and total_ammo > 0:
 		if Input.is_action_just_pressed("reload") and ammo < magazine_size:
 			_start_reload()
-		elif Input.is_action_pressed("shoot") and ammo == 0:
+		elif Input.is_action_pressed("primary_action") and ammo == 0:
 			_start_reload()
 
-	if not reloading and Input.is_action_pressed("shoot") and ammo > 0 and fire_cooldown <= 0.0:
+	if not reloading and Input.is_action_pressed("primary_action") and ammo > 0 and fire_cooldown <= 0.0:
 		_fire()
 		ammo -= 1
 		fire_cooldown = fire_interval_sec
 
 	# Secondary burst attack (bind an input action named "shoot_secondary")
-	if Input.is_action_just_pressed("secondary") and secondary_cooldown <= 0.0:
+	if Input.is_action_just_pressed("secondary_action") and secondary_cooldown <= 0.0:
 		_secondary_fire()
 		secondary_cooldown = secondary_cooldown_sec
 
