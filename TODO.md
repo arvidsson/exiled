@@ -1,17 +1,17 @@
 - player shooting: quick long lines
 - reload weapon, only when trying to shoot with zero ammo?
-- ammo
+- BUG: trying to reload when empty, sound weird
+- ammo: should spawn outside view when empty, and if low increase chance of spawn
 - sounds (what are missing? reload for sure)
-- bullet/weapon does damage amount
 - regen
 
-upgrades: https://www.youtube.com/watch?v=sZDJJeDNe_M
+REFACTOR: PlayerStats and PlayerSkills (ranged, melee, movement)
+FACTOR: Relics? how could they work
 
 - increase hp
 - increase movement speed
 - increase bullet speed
 - increase shoot speed (time between bullets)
--
 
 player stats:
 
@@ -64,5 +64,5 @@ design:
 - monsters scale as game progresses so important that player chooses the right things
 - maybe RoR style trigger boss and then go to next area?
 
-damage numbers:
-https://www.youtube.com/watch?v=wb6LdV-obWY
+ideas:
+- how about one part is say there are 4 relics (one or more are quite bad), so there is a risk here the player might choose to take because 1 relic is really good

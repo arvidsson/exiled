@@ -69,6 +69,7 @@ func move_towards(target: Vector2, delta: float) -> void:
 	var desired := dir * speed
 
 	# Local separation avoidance using a circle query around this mob
+	# TODO: consider using an area2d child instead of doing this each frame
 	var sep := Vector2.ZERO
 	var space_state = get_world_2d().direct_space_state
 	var circle = CircleShape2D.new()
