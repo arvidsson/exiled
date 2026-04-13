@@ -26,7 +26,7 @@ var current_choices = []
 
 func _ready():
 	Events.ammo_changed.connect(_on_ammo_changed)
-	Events.hp_changed.connect(_on_hp_changed)
+	Events.health_changed.connect(_on_health_changed)
 	Events.stamina_changed.connect(_on_stamina_changed)
 	Events.xp_changed.connect(_on_xp_changed)
 	Events.levelup.connect(_on_levelup)
@@ -35,7 +35,7 @@ func _ready():
 func _on_ammo_changed(cur: int, max: int):
 	ammo_label.text = "%d / %d" % [cur, max]
 
-func _on_hp_changed(cur: int, max: int):
+func _on_health_changed(cur: int, max: int):
 	hp_label.text = "%d / %d" % [cur, max]
 
 func _on_stamina_changed(cur: float, max: float):
