@@ -2,7 +2,7 @@ class_name Tools
 extends Node
 
 ## Instantiates a scene at a position and adds it to a parent.
-static func instantiate_at_position(scene: PackedScene, parent: Node, pos: Vector3) -> Node:
+static func instantiate_at_position(scene: PackedScene, parent: Node, pos: Vector2) -> Node:
 	var instance = scene.instantiate()
 	parent.add_child(instance)
 	instance.global_position = pos

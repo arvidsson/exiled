@@ -29,16 +29,31 @@ const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
 
 var cur_dir := Vector2.DOWN
-var current_hp: int
+var current_hp: int:
+	set(value):
+		current_hp = value
+		_sync_hp_label()
 var _rolling := false
 var _dying := false
 var _roll_dir := Vector2.DOWN
-var current_stamina: float
-var current_xp: float = 0.0
+var current_stamina: float:
+	set(value):
+		current_stamina = value
+		_sync_stamina_bar()
+var current_xp: float = 0.0:
+	set(value):
+		current_xp = value
+		_sync_xp_bar()
 var player_level: int = 1
 var _hurt_tween: Tween
-var ammo: int
-var total_ammo: int
+var ammo: int:
+	set(value):
+		ammo = value
+		_sync_ammo_label()
+var total_ammo: int:
+	set(value):
+		total_ammo = value
+		_sync_ammo_label()
 var _reloading := false
 var _reload_remaining: float = 0.0
 var _fire_cooldown: float = 0.0
@@ -56,6 +71,7 @@ func _ready() -> void:
 	call_deferred(&"_sync_xp_bar")
 	call_deferred(&"_sync_hp_label")
 	call_deferred(&"_sync_ammo_label")
+	call_deferred(&"_sync_stamina_bar")
 
 func add_xp(amount: int) -> void:
 	current_xp += amount
@@ -63,7 +79,6 @@ func add_xp(amount: int) -> void:
 		current_xp -= xp_per_level
 		player_level += 1
 		Events.levelup.emit()
-	_sync_xp_bar()
 
 func take_damage(amount: int = 1) -> void:
 	# TODO: hack! should check elsewhere, yup cuz now bullets gets destroyed on collision!
@@ -71,7 +86,6 @@ func take_damage(amount: int = 1) -> void:
 		return
 	current_hp -= amount
 	_play_hurt_flash()
-	_sync_hp_label()
 	var par := get_parent()
 	if par != null:
 		var fc: Node = par.get_node_or_null("FollowCamera")
@@ -137,9 +151,6 @@ func _physics_process(delta: float) -> void:
 	if _rolling:
 		velocity = _roll_dir * max_speed * roll_speed_mult
 		move_and_slide()
-		_sync_stamina_bar()
-		_sync_hp_label()
-		_sync_ammo_label()
 		return
 
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -170,7 +181,7 @@ func _physics_process(delta: float) -> void:
 				total_ammo -= to_load
 			_fire_cooldown = fire_interval_sec
 
-	if not _reloading:
+	if not _reloading and total_ammo != 0:
 		if Input.is_action_just_pressed("reload") and ammo < magazine_size:
 			_start_reload()
 		elif Input.is_action_pressed("shoot") and ammo == 0:
@@ -191,10 +202,6 @@ func _physics_process(delta: float) -> void:
 		_tertiary_fire()
 		ammo -= 1
 		_fire_cooldown = fire_interval_sec
-
-	_sync_stamina_bar()
-	_sync_hp_label()
-	_sync_ammo_label()
 
 func _secondary_fire() -> void:
 	# Damage and crit calculation (same as primary)
@@ -270,7 +277,6 @@ func add_ammo(amount: int) -> void:
 	if amount <= 0:
 		return
 	total_ammo += amount
-	_sync_ammo_label()
 
 func _fire() -> void:
 	Events.skill_used.emit(Globals.Skill.PRIMARY, fire_interval_sec)

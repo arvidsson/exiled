@@ -13,6 +13,9 @@ FACTOR: Relics? how could they work
 - increase bullet speed
 - increase shoot speed (time between bullets)
 
+BUGS:
+- knockback doesnt happen during mob attack
+
 player stats:
 
 - hp
