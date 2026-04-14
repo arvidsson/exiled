@@ -7,6 +7,9 @@ var remain: float = 0.0
 func start(duration: float) -> void:
 	remain = duration
 
+func stop() -> void:
+	remain = 0.0
+
 func tick(delta: float) -> void:
 	remain = maxf(0.0, remain - delta)
 

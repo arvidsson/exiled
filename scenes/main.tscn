@@ -2,6 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://di0ys06d7ggkp" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://b53dj4ns7smsg" path="res://scenes/ui/stamina_bar.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://ctuyttxgynedl" path="res://scripts/skills/player_skill.gd" id="3_0ld40"]
+[ext_resource type="Script" uid="uid://cm5waeo28bbc" path="res://scripts/skills/roll_player_skill.gd" id="3_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://cdm33uoxgay1y" path="res://scenes/ui/xp_bar.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hp_label.tscn" id="4_hp"]
 [ext_resource type="Script" uid="uid://cvvge2tlnt38s" path="res://scripts/managers/ui.gd" id="4_jkv2x"]
@@ -18,6 +20,10 @@
 [ext_resource type="PackedScene" uid="uid://cvodf4utcpbmb" path="res://scenes/level/grass4.tscn" id="13_yc10j"]
 [ext_resource type="PackedScene" uid="uid://drhkct1v4w0wa" path="res://scenes/level/grass5.tscn" id="14_jscy8"]
 
+[sub_resource type="Resource" id="Resource_gqmmt"]
+script = ExtResource("3_dp3eg")
+metadata/_custom_type_script = "uid://cm5waeo28bbc"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkv2x"]
 bg_color = Color(0.9137255, 0.9137255, 0.9137255, 1)
 
@@ -26,8 +32,9 @@ script = ExtResource("7_main")
 
 [node name="Player" parent="." unique_id=1241231395 instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
-roll_speed_mult = 2.0
-roll_stamina_cost = 40.0
+skills = Dictionary[int, ExtResource("3_0ld40")]({
+3: SubResource("Resource_gqmmt")
+})
 
 [node name="FollowCamera" type="Node2D" parent="." unique_id=742758082 node_paths=PackedStringArray("target", "bounds_source")]
 script = ExtResource("5_fc")

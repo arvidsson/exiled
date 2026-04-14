@@ -12,10 +12,6 @@ class_name Player
 @export var secondary_knockback: float = 120.0
 @export var secondary_cooldown_sec: float = 1.5
 
-# roll, TODO: refactor into a PlayerAction
-@export var roll_speed_mult: float = 1.5
-@export var roll_stamina_cost: float = 35.0
-
 @export var max_stamina: float = 100.0
 @export var stamina_regen: float = 25.0 # per sec
 
@@ -34,10 +30,10 @@ const HURT_FLASH_PEAK := Color(5.0, 5.0, 5.0)
 const HURT_FLASH_DURATION := 0.12
 
 var cur_dir := Vector2.DOWN
+var active_skill: PlayerSkill = null
 var health: int
-var rolling := false
 var dying := false
-var roll_dir := Vector2.DOWN
+var invincible := false
 var stamina: float: set = _set_stamina
 var current_xp: float = 0.0
 var player_level: int = 1
@@ -62,6 +58,10 @@ func _ready() -> void:
 	call_deferred(&"_sync_hp_label")
 	call_deferred(&"_sync_ammo_label")
 	call_deferred(&"_sync_stamina_bar")
+	for key in skills.keys():
+		var skill: PlayerSkill = skills[key].duplicate()
+		skill.setup(self)
+		skills[key] = skill
 
 func _set_stamina(value: float):
 	stamina = clamp(value, 0.0, max_stamina)
@@ -86,7 +86,7 @@ func add_xp(amount: int) -> void:
 
 func take_damage(amount: int = 1) -> void:
 	# TODO: hack! should check elsewhere, yup cuz now bullets gets destroyed on collision!
-	if rolling or dying:
+	if invincible or dying:
 		return
 	health -= amount
 	_play_hurt_flash()
@@ -114,7 +114,6 @@ func _play_animation_once(anim: StringName, callback: Callable) -> void:
 
 func _die() -> void:
 	dying = true
-	rolling = false
 	reloading = false
 	velocity = Vector2.ZERO
 	gun.hide()  # hide gun during death animation
@@ -134,7 +133,7 @@ func _play_hurt_flash() -> void:
 	hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
 
 func _process(_delta: float) -> void:
-	if rolling or dying:
+	if dying:
 		return
 	var target := get_global_mouse_position()
 	if (target - global_position).length_squared() > 0.0001:
@@ -149,13 +148,16 @@ func _physics_process(delta: float) -> void:
 	if stamina < max_stamina:
 		stamina = minf(max_stamina, stamina + stamina_regen * delta)
 
-	if Input.is_action_just_pressed("utility_action") and not rolling and stamina >= roll_stamina_cost:
-		_start_roll()
+	if Input.is_action_just_pressed("utility_action") and active_skill == null:
+		var skill = skills[Globals.Skill.UTILITY]
+		if skill.can_use():
+			skill.use()
+			active_skill = skill
 
-	if rolling:
-		velocity = roll_dir * movement_speed * roll_speed_mult
-		move_and_slide()
-		return
+	if active_skill != null:
+		var controls_movement = active_skill.tick(delta)
+		if controls_movement == true:
+			return
 
 	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = dir * movement_speed
@@ -221,22 +223,6 @@ func _secondary_fire() -> void:
 			Audio.play_sfx(Data.Sounds.Shoot)
 		)
 
-
-func _start_roll() -> void:
-	stamina = maxf(0.0, stamina - roll_stamina_cost)
-	var d := cur_dir
-	if d.length_squared() < 0.0001:
-		d = Vector2.DOWN
-	roll_dir = d.normalized()
-	rolling = true
-	gun.hide()
-	_play_roll_anim(roll_dir)
-	sprite.animation_finished.connect(_on_roll_finished, CONNECT_ONE_SHOT)
-
-func _on_roll_finished() -> void:
-	rolling = false
-	gun.show()
-
 func _start_reload() -> void:
 	Audio.play_sfx(Data.Sounds.Reload)
 	if reloading or ammo >= magazine_size or total_ammo <= 0:
@@ -259,18 +245,6 @@ func _fire() -> void:
 
 	Bullet.create(muzzle.global_position, muzzle.global_transform.x, bullet_speed, dmg)
 	Audio.play_sfx(Data.Sounds.Shoot)
-
-func _play_roll_anim(dir: Vector2) -> void:
-	var anim: String
-	if abs(dir.x) < abs(dir.y):
-		sprite.flip_h = false
-		sprite.offset.x = 0
-		anim = "roll_down" if dir.y > 0 else "roll_up"
-	else:
-		anim = "roll_right"
-		sprite.flip_h = dir.x < 0
-		sprite.offset.x = -24 if dir.x < 0 else 0
-	sprite.play(anim)
 
 func _update_anim(state: String, dir: Vector2) -> void:
 	var anim := ""
