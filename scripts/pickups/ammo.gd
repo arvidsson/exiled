@@ -57,6 +57,5 @@ func _collect(player: Node2D) -> void:
 		return
 	collected = true
 	_cancel_lifetime()
-	if player.has_method(&"add_ammo"):
-		player.add_ammo(amount)
+	player.ammo += amount
 	Pools.despawn(self)

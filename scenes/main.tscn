@@ -42,6 +42,7 @@ script = ExtResource("7_main")
 
 [node name="Player" parent="." unique_id=1241231395 instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
+stamina_regen = 10.0
 skills = Dictionary[int, ExtResource("3_0ld40")]({
 1: SubResource("Resource_jscy8"),
 3: SubResource("Resource_yc10j")

@@ -30,12 +30,12 @@ var stamina: float: set = _set_stamina
 var current_xp: float = 0.0
 var player_level: int = 1
 var hurt_tween: Tween
-var ammo: int
+var ammo: int: set = _set_ammo
 var total_ammo: int
 var reloading := false
-var reload_remaining: float = 0.0
-var fire_cooldown: float = 0.0
-var secondary_cooldown: float = 0.0
+
+var fire_timer: CooldownTimer = CooldownTimer.new()
+var reload_timer: ActionTimer = ActionTimer.new()
 
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
@@ -56,9 +56,12 @@ func _ready() -> void:
 		skills[key] = skill
 
 func _set_stamina(value: float):
-	print("SET STAMINA ON:", self)
 	stamina = clamp(value, 0.0, max_stamina)
 	_sync_stamina_bar()
+
+func _set_ammo(value: int):
+	ammo = clamp(value, 0, magazine_size)
+	_sync_ammo_label()
 
 func _sync_stamina_bar() -> void:
 	Events.stamina_changed.emit(stamina, max_stamina)
@@ -144,80 +147,73 @@ func _handle_skill_input() -> void:
 			var skill_id: Globals.Skill = Globals.input_to_skill[action]
 			_try_use_skill(skill_id)
 
+func _update_gun_visuals():
+	# gun aim
+	var target := get_global_mouse_position()
+	gun.look_at(target)
+	gun.scale.y = -1.0 if target.x < global_position.x else 1.0
+
+	# change gun z index depending on if we are facing upwards or not
+	var facing_up: bool = abs(cur_dir.x) < abs(cur_dir.y) and cur_dir.y < 0
+	gun.z_index = -1 if facing_up else 1
+
 func _process(_delta: float) -> void:
 	if dying:
 		return
-	var target := get_global_mouse_position()
-	if (target - global_position).length_squared() > 0.0001:
-		gun.look_at(target)
-		gun.scale.y = -1.0 if target.x < global_position.x else 1.0
-	else:
-		gun.scale.y = 1.0
+	_update_gun_visuals()
 
 func _physics_process(delta: float) -> void:
 	if dying:
 		return
+
+	# stamina regen
 	if stamina < max_stamina:
 		stamina = minf(max_stamina, stamina + stamina_regen * delta)
 
 	_handle_skill_input()
 
-	if active_skill != null:
-		var controls_movement := active_skill.tick(delta)
-		if controls_movement == true:
-			return
+	if active_skill and active_skill.tick(delta):
+		return
 
+	# move
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = dir * movement_speed
 	move_and_slide()
 
+	# update animation
 	if dir.length() > 0:
 		cur_dir = dir
 		_update_anim("move", dir)
 	else:
 		_update_anim("idle", cur_dir)
 
-	# Player facing only (matches _update_anim "up" vs down/horizontal).
-	var facing_up: bool = abs(cur_dir.x) < abs(cur_dir.y) and cur_dir.y < 0
-	gun.z_index = -1 if facing_up else 1
+	fire_timer.tick(delta)
+	reload_timer.tick(delta)
 
-	fire_cooldown = maxf(0.0, fire_cooldown - delta)
-	secondary_cooldown = maxf(0.0, secondary_cooldown - delta)
-	if reloading:
-		reload_remaining -= delta
-		if reload_remaining <= 0.0:
-			reloading = false
-			# Transfer bullets from reserve (total_ammo) to the magazine
-			var needed: int = magazine_size - ammo
-			var to_load: int = min(needed, total_ammo)
-			if to_load > 0:
-				ammo += to_load
-				total_ammo -= to_load
-			fire_cooldown = fire_interval_sec
+	if Input.is_action_just_pressed("reload"):
+		_reload()
+	elif Input.is_action_pressed("primary_action") and ammo == 0:
+		_reload()
 
-	if not reloading and total_ammo > 0:
-		if Input.is_action_just_pressed("reload") and ammo < magazine_size:
-			_start_reload()
-		elif Input.is_action_pressed("primary_action") and ammo == 0:
-			_start_reload()
-
-	if not reloading and Input.is_action_pressed("primary_action") and ammo > 0 and fire_cooldown <= 0.0:
+	if not reloading and Input.is_action_pressed("primary_action") and ammo > 0 and fire_timer.is_ready():
 		_fire()
 		ammo -= 1
-		fire_cooldown = fire_interval_sec
+		fire_timer.start(fire_interval_sec)
 
-func _start_reload() -> void:
-	Audio.play_sfx(Data.Sounds.Reload)
+func _reload() -> void:
 	if reloading or ammo >= magazine_size or total_ammo <= 0:
 		return
+	Audio.play_sfx(Data.Sounds.Reload)
 	reloading = true
-	reload_remaining = reload_duration_sec
-
-func add_ammo(amount: int) -> void:
-	if amount <= 0:
-		return
-	total_ammo += amount
-	_sync_ammo_label()
+	reload_timer.start(reload_duration_sec,
+		func():
+			reloading = false
+			var needed := magazine_size - ammo
+			var to_load := min(needed, total_ammo) as int
+			if to_load > 0:
+				total_ammo -= to_load
+				ammo += to_load
+	)
 
 func _fire() -> void:
 	Events.skill_used.emit(Globals.Skill.PRIMARY, fire_interval_sec)
@@ -245,6 +241,5 @@ func _update_anim(state: String, dir: Vector2) -> void:
 		# HACK: offset fix
 		sprite.offset.x = -24 if dir.x < 0 else 0
 
-	# Avoid restarting animation every frame
 	if sprite.animation != anim:
 		sprite.play(anim)

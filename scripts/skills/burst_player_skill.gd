@@ -7,6 +7,9 @@ class_name BurstPlayerSkill
 @export var bullet_speed: float = 300.0
 @export var knockback: float = 120.0
 
+func can_use() -> bool:
+	return super.can_use() and player.ammo >= bullet_count
+
 func _execute() -> void:
 	_fire()
 
@@ -25,4 +28,5 @@ func _fire() -> void:
 			var d := base_dir.rotated(randf_range(-spread_rad, spread_rad))
 			Bullet.create(player.muzzle.global_position, d, bullet_speed, dmg, knockback)
 			Audio.play_sfx(Data.Sounds.Shoot)
+			player.ammo -= 1
 		)

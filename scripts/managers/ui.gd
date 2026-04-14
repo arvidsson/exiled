@@ -39,7 +39,6 @@ func _on_health_changed(cur: int, max: int):
 	hp_label.text = "%d / %d" % [cur, max]
 
 func _on_stamina_changed(cur: float, max: float):
-	print("UI GOT UPDATE FROM:", cur)
 	stamina_bar.value = cur
 	stamina_bar.max_value = max
 
