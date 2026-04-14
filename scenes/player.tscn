@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cm5waeo28bbc" path="res://scripts/skills/roll_player_skill.gd" id="4_qfm1y"]
 [ext_resource type="Texture2D" uid="uid://c0yf8ym8kq04i" path="res://sprites/player/move_down.png" id="4_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://bxervwhlj7uem" path="res://sprites/player/move_right.png" id="5_fjrip"]
+[ext_resource type="Script" uid="uid://x5dund4bxma3" path="res://scripts/skills/burst_player_skill.gd" id="5_qfm1y"]
 [ext_resource type="Texture2D" uid="uid://smv1g7ohcbiw" path="res://sprites/player/move_up.png" id="6_smehm"]
 [ext_resource type="Texture2D" uid="uid://8rrr4h8mctf6" path="res://sprites/player/roll_down.png" id="8_d2wvv"]
 [ext_resource type="PackedScene" uid="uid://bt0q4cyijk1fp" path="res://scenes/gun.tscn" id="8_smehm"]
@@ -27,6 +28,14 @@ metadata/_custom_type_script = "uid://c2xn7mfdie44n"
 script = ExtResource("4_qfm1y")
 stamina_cost = 25.0
 metadata/_custom_type_script = "uid://cm5waeo28bbc"
+
+[sub_resource type="Resource" id="Resource_4r5pv"]
+script = ExtResource("5_qfm1y")
+bullet_spread = 5.0
+bullet_speed = 500.0
+cooldown = 1.5
+stamina_cost = 20.0
+metadata/_custom_type_script = "uid://x5dund4bxma3"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jx8is"]
 atlas = ExtResource("2_3v2ag")
@@ -755,6 +764,7 @@ script = ExtResource("1_fjrip")
 damage = SubResource("Resource_oprun")
 crit_chance = 0.5
 skills = Dictionary[int, ExtResource("3_a8ls1")]({
+1: SubResource("Resource_4r5pv"),
 3: SubResource("Resource_fulsm")
 })
 

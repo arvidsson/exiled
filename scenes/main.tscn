@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cvvge2tlnt38s" path="res://scripts/managers/ui.gd" id="4_jkv2x"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ammo_label.tscn" id="5_ammo"]
 [ext_resource type="Script" uid="uid://d2fssbhi36671" path="res://scripts/follow_camera.gd" id="5_fc"]
+[ext_resource type="Script" uid="uid://x5dund4bxma3" path="res://scripts/skills/burst_player_skill.gd" id="5_gqmmt"]
 [ext_resource type="Script" uid="uid://5ixw651pmmve" path="res://scripts/level_area.gd" id="6_lvl"]
 [ext_resource type="Script" uid="uid://crpd58wvbndr1" path="res://scripts/main.gd" id="7_main"]
 [ext_resource type="PackedScene" uid="uid://bdgce3amc0h0v" path="res://scenes/ui/mouse.tscn" id="9_jbj1t"]
@@ -20,9 +21,18 @@
 [ext_resource type="PackedScene" uid="uid://cvodf4utcpbmb" path="res://scenes/level/grass4.tscn" id="13_yc10j"]
 [ext_resource type="PackedScene" uid="uid://drhkct1v4w0wa" path="res://scenes/level/grass5.tscn" id="14_jscy8"]
 
-[sub_resource type="Resource" id="Resource_gqmmt"]
+[sub_resource type="Resource" id="Resource_yc10j"]
 script = ExtResource("3_dp3eg")
+stamina_cost = 25.0
 metadata/_custom_type_script = "uid://cm5waeo28bbc"
+
+[sub_resource type="Resource" id="Resource_jscy8"]
+script = ExtResource("5_gqmmt")
+bullet_spread = 5.0
+bullet_speed = 500.0
+cooldown = 1.5
+stamina_cost = 20.0
+metadata/_custom_type_script = "uid://x5dund4bxma3"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jkv2x"]
 bg_color = Color(0.9137255, 0.9137255, 0.9137255, 1)
@@ -33,7 +43,8 @@ script = ExtResource("7_main")
 [node name="Player" parent="." unique_id=1241231395 instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
 skills = Dictionary[int, ExtResource("3_0ld40")]({
-3: SubResource("Resource_gqmmt")
+1: SubResource("Resource_jscy8"),
+3: SubResource("Resource_yc10j")
 })
 
 [node name="FollowCamera" type="Node2D" parent="." unique_id=742758082 node_paths=PackedStringArray("target", "bounds_source")]

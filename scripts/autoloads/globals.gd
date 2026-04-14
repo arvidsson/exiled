@@ -18,3 +18,10 @@ enum Skill {
 	UTILITY,
 	SPECIAL
 }
+
+static var input_to_skill := {
+	"primary_action": Skill.PRIMARY,
+	"secondary_action": Skill.SECONDARY,
+	"utility_action": Skill.UTILITY,
+	"special_action": Skill.SPECIAL
+}

@@ -4,14 +4,6 @@ class_name Player
 @export var movement_speed: float = 50.0
 @export var bullet_speed: float = 300.0
 
-# burst with knockback, TODO: refactor into a PlayerAction
-@export var burst_count: int = 3
-@export var burst_interval_sec: float = 0.06
-@export var burst_spread_deg: float = 6.0
-@export var secondary_bullet_speed: float = 300.0
-@export var secondary_knockback: float = 120.0
-@export var secondary_cooldown_sec: float = 1.5
-
 @export var max_stamina: float = 100.0
 @export var stamina_regen: float = 25.0 # per sec
 
@@ -64,6 +56,7 @@ func _ready() -> void:
 		skills[key] = skill
 
 func _set_stamina(value: float):
+	print("SET STAMINA ON:", self)
 	stamina = clamp(value, 0.0, max_stamina)
 	_sync_stamina_bar()
 
@@ -132,6 +125,25 @@ func _play_hurt_flash() -> void:
 	sprite.modulate = HURT_FLASH_PEAK
 	hurt_tween.tween_property(sprite, "modulate", Color.WHITE, HURT_FLASH_DURATION)
 
+func _try_use_skill(skill_id: Globals.Skill) -> void:
+	var skill: PlayerSkill = skills.get(skill_id)
+	if skill == null:
+		return
+	if not skill.can_use():
+		return
+	skill.use()
+	Events.skill_used.emit(skill_id, skill.cooldown)
+	active_skill = skill
+
+func _handle_skill_input() -> void:
+	if active_skill != null:
+		return
+	for action: String in Globals.input_to_skill.keys():
+		if Input.is_action_just_pressed(action):
+			print("pressed: ", action)
+			var skill_id: Globals.Skill = Globals.input_to_skill[action]
+			_try_use_skill(skill_id)
+
 func _process(_delta: float) -> void:
 	if dying:
 		return
@@ -148,18 +160,14 @@ func _physics_process(delta: float) -> void:
 	if stamina < max_stamina:
 		stamina = minf(max_stamina, stamina + stamina_regen * delta)
 
-	if Input.is_action_just_pressed("utility_action") and active_skill == null:
-		var skill = skills[Globals.Skill.UTILITY]
-		if skill.can_use():
-			skill.use()
-			active_skill = skill
+	_handle_skill_input()
 
 	if active_skill != null:
-		var controls_movement = active_skill.tick(delta)
+		var controls_movement := active_skill.tick(delta)
 		if controls_movement == true:
 			return
 
-	var dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = dir * movement_speed
 	move_and_slide()
 
@@ -197,31 +205,6 @@ func _physics_process(delta: float) -> void:
 		_fire()
 		ammo -= 1
 		fire_cooldown = fire_interval_sec
-
-	# Secondary burst attack (bind an input action named "shoot_secondary")
-	if Input.is_action_just_pressed("secondary_action") and secondary_cooldown <= 0.0:
-		_secondary_fire()
-		secondary_cooldown = secondary_cooldown_sec
-
-func _secondary_fire() -> void:
-	# Damage and crit calculation (same as primary)
-	Events.skill_used.emit(Globals.Skill.SECONDARY, secondary_cooldown_sec)
-	var dmg := damage.get_random()
-	dmg = int(dmg / 2.0)
-	var is_crit := randf() < crit_chance
-	if is_crit:
-		dmg = round(dmg * crit_multiplier)
-
-	var base_dir: Vector2 = muzzle.global_transform.x
-	var spread_rad := burst_spread_deg * PI / 180.0
-
-	for i in range(burst_count):
-		# Schedule each bullet closely after the previous one
-		Tools.call_delay(self, i * burst_interval_sec, func() -> void:
-			var d := base_dir.rotated(randf_range(-spread_rad, spread_rad))
-			Bullet.create(muzzle.global_position, d, secondary_bullet_speed, dmg, secondary_knockback)
-			Audio.play_sfx(Data.Sounds.Shoot)
-		)
 
 func _start_reload() -> void:
 	Audio.play_sfx(Data.Sounds.Reload)
