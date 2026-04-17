@@ -1,6 +1,8 @@
+- reload progress bar on player
+- healthbar (instead of labels)
+- show ammo more clearly at center
+
 - player shooting: quick long lines
-- reload weapon, only when trying to shoot with zero ammo?
-- BUG: trying to reload when empty, sound weird
 - ammo: should spawn outside view when empty, and if low increase chance of spawn
 - sounds (what are missing? reload for sure)
 - regen

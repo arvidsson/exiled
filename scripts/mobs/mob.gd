@@ -68,6 +68,9 @@ func move_towards(target: Vector2, delta: float) -> void:
 	# Base desired movement velocity towards target
 	var desired := dir * speed
 
+	# Allow subclasses to add custom movement (like evasion)
+	desired += _get_custom_velocity()
+
 	# Local separation avoidance using a circle query around this mob
 	# TODO: consider using an area2d child instead of doing this each frame
 	var sep := Vector2.ZERO
@@ -98,7 +101,13 @@ func move_towards(target: Vector2, delta: float) -> void:
 
 	# Smooth towards desired velocity and clamp
 	velocity = velocity.lerp(desired, clamp(delta * responsiveness, 0.0, 1.0))
-	velocity = velocity.limit_length(speed)
+
+	var max_allowed = speed
+	if desired.length() > speed:
+		# Allow exceeding speed up to 2.5x for special behaviors like evasion
+		max_allowed = min(desired.length(), speed * 2.5)
+
+	velocity = velocity.limit_length(max_allowed)
 
 	move_and_slide()
 
@@ -107,6 +116,9 @@ func move_towards(target: Vector2, delta: float) -> void:
 
 func stop() -> void:
 	velocity = Vector2.ZERO
+
+func _get_custom_velocity() -> Vector2:
+	return Vector2.ZERO
 
 func process_skills(dt: float):
 	for skill in skills:
