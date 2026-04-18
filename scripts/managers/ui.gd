@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var stamina_bar: ProgressBar = $StaminaBar
 @onready var xp_bar: ProgressBar = $XpBar
-@onready var hp_label: Label = $HpLabel
+@onready var health_bar: ProgressBar = $HealthBar
 @onready var ammo_label: Label = $AmmoLabel
 @onready var levelup_panel: Panel = $LevelUpPanel
 
@@ -37,7 +37,8 @@ func _on_ammo_changed(cur: int, max: int):
 	ammo_label.text = "%d / %d" % [cur, max]
 
 func _on_health_changed(cur: int, max: int):
-	hp_label.text = "%d / %d" % [cur, max]
+	health_bar.value = cur
+	health_bar.max_value = max
 
 func _on_stamina_changed(cur: float, max: float):
 	stamina_bar.value = cur
