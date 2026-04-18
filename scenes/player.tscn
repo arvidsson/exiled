@@ -24,11 +24,6 @@ min = 3
 max = 5
 metadata/_custom_type_script = "uid://c2xn7mfdie44n"
 
-[sub_resource type="Resource" id="Resource_fulsm"]
-script = ExtResource("4_qfm1y")
-stamina_cost = 25.0
-metadata/_custom_type_script = "uid://cm5waeo28bbc"
-
 [sub_resource type="Resource" id="Resource_4r5pv"]
 script = ExtResource("5_qfm1y")
 bullet_spread = 5.0
@@ -36,6 +31,11 @@ bullet_speed = 500.0
 cooldown = 1.5
 stamina_cost = 20.0
 metadata/_custom_type_script = "uid://x5dund4bxma3"
+
+[sub_resource type="Resource" id="Resource_fulsm"]
+script = ExtResource("4_qfm1y")
+stamina_cost = 25.0
+metadata/_custom_type_script = "uid://cm5waeo28bbc"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jx8is"]
 atlas = ExtResource("2_3v2ag")
@@ -758,6 +758,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_tuyoq"]
 radius = 4.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qfm1y"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fulsm"]
+bg_color = Color(1, 1, 1, 1)
+
 [node name="Player" type="CharacterBody2D" unique_id=1241231395 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_fjrip")
@@ -782,3 +788,12 @@ shape = SubResource("CircleShape2D_tuyoq")
 
 [node name="Gun" parent="." unique_id=1664364452 instance=ExtResource("8_smehm")]
 position = Vector2(0, -8)
+
+[node name="ReloadBar" type="ProgressBar" parent="." unique_id=1613884432]
+offset_left = -6.0
+offset_top = 5.0
+offset_right = 6.0
+offset_bottom = 6.0
+theme_override_styles/background = SubResource("StyleBoxFlat_qfm1y")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fulsm")
+show_percentage = false

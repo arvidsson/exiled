@@ -29,12 +29,14 @@ func _execute(mob: Mob) -> void:
 	# mob.play_animation(&"prep_charge")
 
 	Tools.call_delay(mob, prep_duration, func():
+		if !is_instance_valid(mob): return
 		if mob.dying: return
 		prepping = false
 		charging = true
 		mob.speed = original_speed * charge_speed_multiplier
 
 		Tools.call_delay(mob, charge_duration, func():
+			if !is_instance_valid(mob): return
 			charging = false
 			mob.speed = original_speed
 		)

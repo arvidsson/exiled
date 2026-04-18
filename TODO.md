@@ -1,13 +1,16 @@
+GOAL: two enemy types, adjust stuff until it feels fun!
 - reload progress bar on player
 - healthbar (instead of labels)
 - show ammo more clearly at center
+- sounds
+- health regen
+- show stats
+- slower rampup of spawns
+- some kind of obstacle
+
+=================================================
 
 - player shooting: quick long lines
-- ammo: should spawn outside view when empty, and if low increase chance of spawn
-- sounds (what are missing? reload for sure)
-- regen
-
-REFACTOR: PlayerStats and PlayerSkills (ranged, melee, movement)
 FACTOR: Relics? how could they work
 
 - increase hp

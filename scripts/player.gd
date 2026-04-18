@@ -40,12 +40,14 @@ var reload_timer: ActionTimer = ActionTimer.new()
 @onready var sprite := $AnimatedSprite2D
 @onready var gun := $Gun
 @onready var muzzle := $Gun/Muzzle
+@onready var reload_bar: ProgressBar = $ReloadBar
 
 func _ready() -> void:
 	stamina = max_stamina
 	health = max_health
 	ammo = magazine_size
 	total_ammo = magazine_size * 2
+
 	call_deferred(&"_sync_xp_bar")
 	call_deferred(&"_sync_hp_label")
 	call_deferred(&"_sync_ammo_label")
@@ -189,6 +191,14 @@ func _physics_process(delta: float) -> void:
 
 	fire_timer.tick(delta)
 	reload_timer.tick(delta)
+
+	if reloading:
+		reload_bar.show()
+		var total = reload_duration_sec
+		if total > 0:
+			reload_bar.value = ((total - reload_timer.remain) / total) * 100.0
+	else:
+		reload_bar.hide()
 
 	if Input.is_action_just_pressed("reload"):
 		_reload()

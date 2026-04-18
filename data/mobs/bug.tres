@@ -24,7 +24,6 @@ metadata/_custom_type_script = "uid://bggw2eqbgwpiy"
 [resource]
 resource_name = "bug"
 script = ExtResource("2_oycof")
-spawn_cost = 10
 speed = 30.0
 health = 5
 skills = Array[ExtResource("3_gm0jy")]([SubResource("Resource_mu60g")])

@@ -15,6 +15,9 @@ func _ready() -> void:
 	Pools.register(Data.Scenes.Ammo, $Level/XpContainer)
 	Audio.play_music(Data.Music.Default, -20)
 
+func _process(_delta: float) -> void:
+	Debug.set_info("FPS", Engine.get_frames_per_second())
+
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
 		_toggle_fullscreen()
