@@ -45,7 +45,7 @@ func _ready() -> void:
 	# Load default scenes if none provided
 	if available_scenes.is_empty():
 		available_scenes.append(load("uid://dw6i8s0i62np2")) # Bug
-		available_scenes.append(load("uid://cr74oa801on3x")) # Lizard
+		#available_scenes.append(load("uid://cr74oa801on3x")) # Lizard
 		available_scenes.append(load("uid://brpqs6g30un30")) # Warrior
 
 	# Initialize spawn cards by peeking into scenes

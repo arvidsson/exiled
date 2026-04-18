@@ -12,14 +12,30 @@ func _physics_process(delta: float) -> void:
 		return
 
 	process_skills(delta)
-	update_facing(player.global_position)
+
+	var charge_skill: ChargeMobSkill = null
+	for skill in skills:
+		if skill is ChargeMobSkill:
+			charge_skill = skill
+			break
+
+	var is_charging = charge_skill != null and charge_skill.charging
+	var is_prepping = charge_skill != null and charge_skill.prepping
+
+	if not is_charging:
+		update_facing(player.global_position)
 
 	for skill: MobSkill in skills:
 		if skill.can_use(self):
 			skill.use(self)
 			return
 
-	move_towards(player.global_position, delta)
+	if is_charging:
+		move_towards(global_position + charge_skill.charge_dir * 100.0, delta)
+	elif is_prepping:
+		stop()
+	else:
+		move_towards(player.global_position, delta)
 
 	if velocity.length_squared() > 0.0001:
 		play_animation(&"move")

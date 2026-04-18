@@ -17,7 +17,8 @@ range = 150.0
 damage = SubResource("Resource_rcrqd")
 animation = "attack"
 bullet_speed = 180.0
-cooldown = 2.0
+cooldown_min = 1.5
+cooldown_max = 2.5
 metadata/_custom_type_script = "uid://bggw2eqbgwpiy"
 
 [resource]
