@@ -8,7 +8,7 @@ class_name Mob
 @export var xp_reward: int = 10
 @export var max_health: int = 10
 @export var drop_chance: float = 0.6 # chance to drop anything on death
-@export var ammo_chance: float = 0.2 # given a drop, chance it's ammo instead of XP
+@export var ammo_chance: float = 0.25 # given a drop, chance it's ammo instead of XP
 @export var hurt_flash_color := Color(5, 5, 5)
 @export var sep_radius: float = 24.0
 @export var sep_weight: float = 120.0
@@ -163,7 +163,11 @@ func _on_die_anim_finished() -> void:
 	# Chance to drop something on death
 	if randf() < drop_chance:
 		# Small chance that the drop is ammo instead of XP
-		if randf() < ammo_chance:
+		var actual_ammo_chance := ammo_chance
+		if player and (player.total_ammo == 0 or player.ammo == 0):
+			actual_ammo_chance *= 2.5 # Significant boost if low/out of ammo
+
+		if randf() < actual_ammo_chance:
 			var ammo_drop = Pools.spawn(Data.Scenes.Ammo, global_position) as Ammo
 			# Give ammo proportional to xp_reward (at least 1)
 			ammo_drop.setup(max(1, int(xp_reward / 2)))

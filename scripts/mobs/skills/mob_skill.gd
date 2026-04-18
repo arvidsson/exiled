@@ -12,7 +12,7 @@ func use(mob: Mob) -> void:
 	remaining = cooldown
 	_execute(mob)
 
-func _execute(mob: Mob) -> void:
+func _execute(_mob: Mob) -> void:
 	# override
 	pass
 

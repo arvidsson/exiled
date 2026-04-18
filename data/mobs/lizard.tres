@@ -20,6 +20,7 @@ metadata/_custom_type_script = "uid://buc5okxx7ckj0"
 [resource]
 resource_name = "lizard"
 script = ExtResource("2_tki2v")
+spawn_cost = 30
 xp_reward = 50
 health = 30
 skills = Array[ExtResource("3_kx1nk")]([SubResource("Resource_l1lb6")])

@@ -15,11 +15,12 @@ extends CanvasLayer
 @onready var player: Player = %Player
 
 var upgrade_pool = [
-	{"name":"Increase Health","apply":func(p): p.max_hp += 5; p.current_hp += 5},
-	{"name":"Increase Damage","apply":func(p): p.damage += 5}, # BUG
-	{"name":"Increase Speed","apply":func(p): p.max_speed += 10},
-	{"name":"Stamina Regen","apply":func(p): p.stamina_regen_per_sec += 5},
-	{"name":"Increase Ammo","apply":func(p): p.magazine_size += 3; p.total_ammo += 3},
+	{"name":"Increase Max Health","apply":func(p:Player): p.max_health *= 1.1},
+	{"name":"Increase Min Damage","apply":func(p:Player): p.damage.min += 1},
+	{"name":"Increase Max Damage","apply":func(p:Player): p.damage.max += 1},
+	{"name":"Increase Speed","apply":func(p:Player): p.movement_speed *= 1.2},
+	{"name":"Stamina Regen","apply":func(p:Player): p.stamina_regen_per_sec += 5},
+	{"name":"Increase Ammo","apply":func(p:Player): p.magazine_size += 3; p.total_ammo += 3},
 ]
 
 var current_choices = []
