@@ -75,6 +75,14 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_jkv2x")
 show_percentage = false
 
 [node name="AmmoLabel" parent="UI" unique_id=1431045426 instance=ExtResource("5_ammo")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.5
+offset_right = 22.5
+grow_horizontal = 2
+text = "6 / 6"
+horizontal_alignment = 1
 
 [node name="LevelUpPanel" type="Panel" parent="UI" unique_id=302967766]
 process_mode = 3
@@ -159,8 +167,8 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -35.0
-offset_bottom = -11.0
+offset_top = -48.0
+offset_bottom = -23.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 1
@@ -188,9 +196,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 130.0
-offset_top = -11.0
+offset_top = -16.0
 offset_right = -124.0
-offset_bottom = -8.0
+offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_gqmmt")

@@ -1,5 +1,4 @@
 GOAL: two enemy types, adjust stuff until it feels fun!
-- healthbar (instead of labels)
 - show ammo more clearly at center
 - sounds
 - health regen
