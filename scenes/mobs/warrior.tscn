@@ -3,9 +3,39 @@
 [ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_amwun"]
 [ext_resource type="Script" uid="uid://0lfwu4i2y1oy" path="res://scripts/mobs/warrior.gd" id="2_058h0"]
 [ext_resource type="Resource" uid="uid://dme3r7rkupei7" path="res://data/mobs/warrior.tres" id="2_tvbsx"]
+[ext_resource type="Script" uid="uid://c2xn7mfdie44n" path="res://scripts/data/range_int.gd" id="3_senxy"]
+[ext_resource type="Script" uid="uid://buc5okxx7ckj0" path="res://scripts/mobs/skills/melee_attack_mob_skill.gd" id="4_y0lwp"]
+[ext_resource type="Script" uid="uid://cxcvvaig640lg" path="res://scripts/mobs/skills/charge_mob_skill.gd" id="5_vc3dy"]
+
+[sub_resource type="Resource" id="Resource_y5p6r"]
+script = ExtResource("3_senxy")
+min = 3
+max = 5
+metadata/_custom_type_script = "uid://c2xn7mfdie44n"
+
+[sub_resource type="Resource" id="Resource_ecgni"]
+script = ExtResource("4_y0lwp")
+damage = SubResource("Resource_y5p6r")
+animation = "attack"
+slash_offset = 16.0
+metadata/_custom_type_script = "uid://buc5okxx7ckj0"
+
+[sub_resource type="Resource" id="Resource_irin3"]
+script = ExtResource("5_vc3dy")
+charge_range = 150.0
+charge_speed_multiplier = 4.0
+charge_duration = 0.4
+prep_duration = 0.4
+cooldown_min = 3.0
+cooldown_max = 5.0
+metadata/_custom_type_script = "uid://cxcvvaig640lg"
 
 [node name="Warrior" unique_id=954850513 instance=ExtResource("1_amwun")]
 script = ExtResource("2_058h0")
+evade_weight = 120.0
+evade_radius = 80.0
+melee_attack = SubResource("Resource_ecgni")
+charge = SubResource("Resource_irin3")
 data = ExtResource("2_tvbsx")
 xp_reward = 50
 

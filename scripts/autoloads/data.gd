@@ -7,6 +7,7 @@ class Mobs:
 	static var Bug: PackedScene = load("uid://dw6i8s0i62np2")
 	static var Lizard: PackedScene = load("uid://cr74oa801on3x")
 	static var Warrior: PackedScene = load("uid://brpqs6g30un30")
+	static var Wisp: PackedScene = load("uid://d2qb70k4d8mv2")
 
 class Scenes:
 	static var XpPickup: PackedScene = load("uid://bg4ey3x532mxi")

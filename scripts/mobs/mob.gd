@@ -16,6 +16,7 @@ class_name Mob
 @export var hurt_flash_duration := 0.12
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var shadow_sprite: Sprite2D = $Shadow
 @onready var healthbar: ProgressBar = $HealthBar
 @onready var damage_label_spawn: Node2D = $DamageLabelSpawn
 @onready var separation_box: CollisionShape2D = $SeparationBox
@@ -154,6 +155,7 @@ func _update_healthbar() -> void:
 	healthbar.visible = health < max_health
 
 func _die() -> void:
+	shadow_sprite.visible = false
 	healthbar.visible = false
 	dying = true
 	velocity = Vector2.ZERO
@@ -188,6 +190,7 @@ func _reset():
 func _on_spawn() -> void:
 	_reset()
 	health = max_health
+	shadow_sprite.visible = true
 	healthbar.visible = false
 	dying = false
 	attacking = false

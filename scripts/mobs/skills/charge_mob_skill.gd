@@ -44,5 +44,3 @@ func _execute(mob: Mob) -> void:
 
 func process(delta: float) -> void:
 	super.process(delta)
-	# Logic for charging could be here, but we are modifying mob.speed directly for now.
-	# If we wanted to lock the direction during charge, we'd handle it here or in Warrior.

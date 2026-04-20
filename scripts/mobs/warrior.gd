@@ -1,8 +1,20 @@
 extends Mob
 class_name Warrior
 
+enum State {
+	CHASE,
+	EVADE,
+	PREP,
+	CHARGE
+}
+
 @export var evade_weight: float = 120.0
 @export var evade_radius: float = 80.0
+
+@export var melee_attack: MeleeAttackMobSkill
+@export var charge: ChargeMobSkill
+
+var current_state := State.CHASE
 
 func _ready() -> void:
 	super._ready()
@@ -13,36 +25,58 @@ func _physics_process(delta: float) -> void:
 
 	process_skills(delta)
 
-	var charge_skill: ChargeMobSkill = null
-	for skill in skills:
-		if skill is ChargeMobSkill:
-			charge_skill = skill
-			break
-
+	var charge_skill: ChargeMobSkill = _get_charge_skill()
 	var is_charging = charge_skill != null and charge_skill.charging
 	var is_prepping = charge_skill != null and charge_skill.prepping
 
-	if not is_charging:
+	# Determine current behavior state
+	var evade_vec = _get_evasion_vector()
+
+	if is_charging:
+		current_state = State.CHARGE
+	elif is_prepping:
+		current_state = State.PREP
+	elif evade_vec.length_squared() > 0.001:
+		current_state = State.EVADE
+	else:
+		current_state = State.CHASE
+
+	# Update facing (unless charging)
+	if current_state != State.CHARGE:
 		update_facing(player.global_position)
 
+	# Check for skill usage (e.g. melee attack)
 	for skill: MobSkill in skills:
 		if skill.can_use(self):
 			skill.use(self)
 			return
 
-	if is_charging:
-		move_towards(global_position + charge_skill.charge_dir * 100.0, delta)
-	elif is_prepping:
-		stop()
-	else:
-		move_towards(player.global_position, delta)
-
+	# Execute movement based on state
+	match current_state:
+		State.CHARGE:
+			move_towards(global_position + charge_skill.charge_dir * 100.0, delta)
+		State.PREP:
+			stop()
+		State.EVADE:
+			# Move in evasion direction instead of towards player
+			var original_speed = speed
+			speed = evade_weight
+			move_towards(global_position + evade_vec * 100.0, delta)
+			speed = original_speed
+		State.CHASE:
+			move_towards(player.global_position, delta)
 	if velocity.length_squared() > 0.0001:
 		play_animation(&"move")
 	else:
 		play_animation(&"idle")
 
-func _get_custom_velocity() -> Vector2:
+func _get_charge_skill() -> ChargeMobSkill:
+	for skill in skills:
+		if skill is ChargeMobSkill:
+			return skill as ChargeMobSkill
+	return null
+
+func _get_evasion_vector() -> Vector2:
 	var evade := Vector2.ZERO
 	var space_state = get_world_2d().direct_space_state
 
@@ -96,4 +130,4 @@ func _get_custom_velocity() -> Vector2:
 			var strength = (24.0 - dist_to_path) / 24.0
 			evade += evade_dir * strength
 
-	return evade.limit_length(1.0) * evade_weight
+	return evade.limit_length(1.0)

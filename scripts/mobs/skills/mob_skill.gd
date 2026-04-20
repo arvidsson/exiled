@@ -6,6 +6,8 @@ class_name MobSkill
 
 var remaining := 0.0
 
+# TODO: setup(mob) instead of passing it everywhere
+
 func can_use(mob: Mob) -> bool:
 	return remaining <= 0.0 and not mob.dying
 

@@ -27,12 +27,11 @@ charge_duration = 0.4
 prep_duration = 0.4
 cooldown_min = 3.0
 cooldown_max = 5.0
-metadata/_custom_type_script = "uid://dr18yul464r5w"
 
 [resource]
 resource_name = "warrior"
 script = ExtResource("2_oienm")
-spawn_cost = 50
+spawn_cost = 20
 speed = 50.0
 xp_reward = 50
 health = 5

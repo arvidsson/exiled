@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MobData" format=3 uid="uid://xgroyigmtsua"]
+
+[ext_resource type="Script" uid="uid://cg577v8dg55pn" path="res://scripts/data/mob_data.gd" id="1_rp35m"]
+[ext_resource type="Script" uid="uid://yv4ndg1kommo" path="res://scripts/mobs/skills/mob_skill.gd" id="2_p4jjr"]
+
+[resource]
+script = ExtResource("1_rp35m")
+spawn_cost = 5
+attack_range = 16.0
+metadata/_custom_type_script = "uid://cg577v8dg55pn"

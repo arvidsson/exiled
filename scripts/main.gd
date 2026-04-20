@@ -8,6 +8,7 @@ func _ready() -> void:
 	Pools.register(Data.Mobs.Warrior, $Level/MobContainer)
 	Pools.register(Data.Mobs.Lizard, $Level/MobContainer)
 	Pools.register(Data.Mobs.Bug, $Level/MobContainer)
+	Pools.register(Data.Mobs.Wisp, $Level/MobContainer)
 	Pools.register(Data.Scenes.Bullet, $Level/BulletContainer)
 	Pools.register(Data.Scenes.MobBullet, $Level/BulletContainer)
 	Pools.register(Data.Scenes.Slash, $Level/BulletContainer)

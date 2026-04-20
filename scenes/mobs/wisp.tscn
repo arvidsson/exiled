@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://d2qb70k4d8mv2"]
+
+[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_1lsp5"]
+[ext_resource type="Script" uid="uid://c4nhyx0ykpj5q" path="res://scripts/mobs/wisp.gd" id="2_t5bhp"]
+[ext_resource type="Resource" uid="uid://xgroyigmtsua" path="res://data/mobs/wisp.tres" id="3_4602y"]
+[ext_resource type="Texture2D" uid="uid://chy10lb8y5kto" path="res://sprites/enemy/wisp/death/sWispDeath_0.png" id="4_l3dra"]
+[ext_resource type="Texture2D" uid="uid://roe7qtonnl58" path="res://sprites/enemy/wisp/sWispIdle_0.png" id="4_ymce0"]
+[ext_resource type="Texture2D" uid="uid://b4fu21c203jbh" path="res://sprites/enemy/wisp/death/sWispDeath_1.png" id="5_4wqg6"]
+[ext_resource type="Texture2D" uid="uid://d4ex5nrwqu6lw" path="res://sprites/enemy/wisp/sWispIdle_1.png" id="5_neowl"]
+[ext_resource type="Texture2D" uid="uid://tlfsylo3oh85" path="res://sprites/enemy/wisp/sWispIdle_2.png" id="6_4l3bd"]
+[ext_resource type="Texture2D" uid="uid://2rupnvpeob1v" path="res://sprites/enemy/wisp/death/sWispDeath_2.png" id="6_snsrh"]
+[ext_resource type="Texture2D" uid="uid://dsp7mkk1awh1l" path="res://sprites/enemy/wisp/sWispIdle_3.png" id="7_130hx"]
+[ext_resource type="Texture2D" uid="uid://ccknpe6u3svog" path="res://sprites/enemy/wisp/death/sWispDeath_3.png" id="7_erd17"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hlsec"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_l3dra")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_4wqg6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_snsrh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_erd17")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ymce0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_neowl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_4l3bd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_130hx")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ymce0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_neowl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_4l3bd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_130hx")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[node name="Wisp" unique_id=954850513 instance=ExtResource("1_1lsp5")]
+script = ExtResource("2_t5bhp")
+data = ExtResource("3_4602y")
+speed = 40.0
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1362614468]
+sprite_frames = SubResource("SpriteFrames_hlsec")
+animation = &"die"
