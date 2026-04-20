@@ -190,6 +190,8 @@ bg_color = Color(0, 0, 0, 0.5686275)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4cuo"]
 bg_color = Color(0.5137255, 0.02745098, 0.050980393, 1)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_d4cuo"]
+
 [node name="Mob" type="CharacterBody2D" unique_id=954850513 groups=["enemy"]]
 collision_layer = 4
 script = ExtResource("1_bsing")
@@ -203,9 +205,10 @@ position = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_8tegq")
 animation = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1042489938]
+[node name="HitBox" type="CollisionShape2D" parent="." unique_id=1042489938]
 position = Vector2(0, -7)
 shape = SubResource("CircleShape2D_8tegq")
+debug_color = Color(0.89440167, 0.28475583, 0.38795397, 0.41960785)
 
 [node name="HealthBar" type="ProgressBar" parent="." unique_id=253243207]
 offset_left = -9.0
@@ -220,3 +223,7 @@ show_percentage = false
 
 [node name="DamageLabelSpawn" type="Node2D" parent="." unique_id=1379598192]
 position = Vector2(0, -13)
+
+[node name="SeparationBox" type="CollisionShape2D" parent="." unique_id=864877799]
+position = Vector2(0, -7)
+shape = SubResource("CircleShape2D_d4cuo")

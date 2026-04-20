@@ -18,12 +18,15 @@ class_name Mob
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var healthbar: ProgressBar = $HealthBar
 @onready var damage_label_spawn: Node2D = $DamageLabelSpawn
+@onready var separation_box: CollisionShape2D = $SeparationBox
+@onready var hit_box: CollisionShape2D = $HitBox
 @onready var player: Player = get_tree().get_first_node_in_group("player") as Player
 
 var health: int
 var dying := false
 var attacking := false
 var hurt_tween: Tween
+var sep_query: PhysicsShapeQueryParameters2D
 var skills: Array[MobSkill]
 
 # Knockback handling
@@ -34,6 +37,11 @@ func apply_knockback(vec: Vector2) -> void:
 	knockback_velocity += vec
 
 func _ready() -> void:
+	# setup separation behaviour
+	sep_query = PhysicsShapeQueryParameters2D.new()
+	sep_query.shape = separation_box.shape
+	sep_query.exclude = [self]
+	sep_query.collide_with_bodies = true
 	if data.skills.size() > 0:
 		for skill in data.skills:
 			skills.append(skill.duplicate())
@@ -72,17 +80,11 @@ func move_towards(target: Vector2, delta: float) -> void:
 	desired += _get_custom_velocity()
 
 	# Local separation avoidance using a circle query around this mob
-	# TODO: consider using an area2d child instead of doing this each frame
 	var sep := Vector2.ZERO
 	var space_state = get_world_2d().direct_space_state
-	var circle = CircleShape2D.new()
-	circle.radius = sep_radius
-	var params = PhysicsShapeQueryParameters2D.new()
-	params.shape = circle
-	params.transform = Transform2D(0, global_position)
-	params.exclude = [self]
-	params.collide_with_bodies = true
-	var results = space_state.intersect_shape(params, 32)
+	sep_query.transform = separation_box.global_transform
+
+	var results = space_state.intersect_shape(sep_query, 32)
 	for res in results:
 		var body = res.collider
 		if body is Node2D:
