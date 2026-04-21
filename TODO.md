@@ -1,5 +1,8 @@
 GOAL: two enemy types, adjust stuff until it feels fun!
-- show ammo more clearly at center
+- slime: large will spawn 2-5 small ones on death
+- get rid of ammo
+- get rid of stamina
+- introduce "energy" gained on kill?
 - sounds
 - health regen
 - show stats

@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://befl5kw4dom0v"]
+
+[ext_resource type="PackedScene" uid="uid://c4wl278mg4npe" path="res://scenes/mob.tscn" id="1_a04wj"]
+[ext_resource type="Texture2D" uid="uid://pp2ygq8bpksj" path="res://sprites/enemy/slime/sSlimeIdle.png" id="2_5efu3"]
+[ext_resource type="Script" uid="uid://8rkl6kgt4wcm" path="res://scripts/mobs/slime.gd" id="2_7jqfx"]
+[ext_resource type="Texture2D" uid="uid://bnjfirnmcnqba" path="res://sprites/enemy/slime/sSlimeDeath.png" id="2_c5f8g"]
+[ext_resource type="Script" uid="uid://c2xn7mfdie44n" path="res://scripts/data/range_int.gd" id="3_2rmcp"]
+[ext_resource type="Resource" uid="uid://dcrf80h81di5d" path="res://data/mobs/slime.tres" id="3_d87ou"]
+[ext_resource type="Script" uid="uid://buc5okxx7ckj0" path="res://scripts/mobs/skills/melee_attack_mob_skill.gd" id="4_6gbqr"]
+[ext_resource type="Texture2D" uid="uid://bgyg2gr1y8m47" path="res://sprites/enemy/slime/sSlimeWalk_0.png" id="4_l03mr"]
+[ext_resource type="Texture2D" uid="uid://dqt3hr2wrwmrf" path="res://sprites/enemy/slime/sSlimeWalk_1.png" id="5_24o2c"]
+[ext_resource type="Texture2D" uid="uid://c63b3ussjftli" path="res://sprites/enemy/slime/sSlimeWalk_2.png" id="6_j0wm8"]
+[ext_resource type="Texture2D" uid="uid://byyjx2n7y8pvg" path="res://sprites/enemy/slime/sSlimeWalk_3.png" id="7_1xgve"]
+[ext_resource type="Texture2D" uid="uid://d1b5ur7whiaox" path="res://sprites/enemy/slime/sSlimeShoot1_6.png" id="8_0j6fy"]
+[ext_resource type="Texture2D" uid="uid://3msfaw43vv2a" path="res://sprites/enemy/slime/sSlimeWalk_4.png" id="8_mc6ey"]
+[ext_resource type="Texture2D" uid="uid://cce34ihw78b5j" path="res://sprites/enemy/slime/sSlimeWalk_5.png" id="9_0d5tf"]
+[ext_resource type="Texture2D" uid="uid://do3cjqn8t1sw" path="res://sprites/enemy/slime/sSlimeShoot1_7.png" id="9_ojtvb"]
+[ext_resource type="Texture2D" uid="uid://c0i4geemt8wrd" path="res://sprites/enemy/slime/sSlimeWalk_6.png" id="10_b8kqr"]
+[ext_resource type="Texture2D" uid="uid://wvtus1u0hf28" path="res://sprites/enemy/slime/sSlimeShoot1_8.png" id="10_x36sj"]
+[ext_resource type="Texture2D" uid="uid://bc0svtmyab1h4" path="res://sprites/enemy/slime/sSlimeShoot1_9.png" id="11_5iysh"]
+[ext_resource type="Texture2D" uid="uid://1sx8sm1q3fxw" path="res://sprites/enemy/slime/sSlimeWalk_7.png" id="11_ud874"]
+[ext_resource type="Texture2D" uid="uid://400iuywps5yk" path="res://sprites/enemy/slime/sSlimeShoot1_10.png" id="12_rknvs"]
+[ext_resource type="Texture2D" uid="uid://djaqi2b8w1sn2" path="res://sprites/enemy/slime/sSlimeShoot1_11.png" id="13_0dn7l"]
+[ext_resource type="Texture2D" uid="uid://tmtns53cxu12" path="res://sprites/enemy/slime/sSlimeShoot1_12.png" id="14_1fukm"]
+[ext_resource type="Texture2D" uid="uid://ci2y5wbwm7ouh" path="res://sprites/enemy/slime/sSlimeShoot1_13.png" id="15_13tq6"]
+
+[sub_resource type="Resource" id="Resource_ymf1p"]
+script = ExtResource("3_2rmcp")
+min = 3
+max = 5
+metadata/_custom_type_script = "uid://c2xn7mfdie44n"
+
+[sub_resource type="Resource" id="Resource_ixe3s"]
+script = ExtResource("4_6gbqr")
+damage = SubResource("Resource_ymf1p")
+animation = "attack"
+metadata/_custom_type_script = "uid://buc5okxx7ckj0"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c5f8g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_0j6fy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ojtvb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_x36sj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_5iysh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_rknvs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_0dn7l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_1fukm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_13tq6")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_c5f8g")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_5efu3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_l03mr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_24o2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_j0wm8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_1xgve")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_mc6ey")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0d5tf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_b8kqr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ud874")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[node name="Slime" unique_id=954850513 instance=ExtResource("1_a04wj")]
+script = ExtResource("2_7jqfx")
+size = 2
+attack = SubResource("Resource_ixe3s")
+data = ExtResource("3_d87ou")
+speed = 40.0
+
+[node name="Shadow" parent="." index="0" unique_id=14050490]
+position = Vector2(0, 9.000001)
+scale = Vector2(4.62, 4.62)
+
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1362614468]
+sprite_frames = SubResource("SpriteFrames_c5f8g")
+animation = &"attack"
+frame = 7
+frame_progress = 1.0
+
+[node name="HitBox" parent="." index="2" unique_id=1042489938]
+visible = false
+scale = Vector2(3.5200002, 3.5200002)
+
+[node name="HealthBar" parent="." index="3" unique_id=253243207]
+visible = false
+offset_top = -37.0
+offset_bottom = -36.0
+
+[node name="DamageLabelSpawn" parent="." index="4" unique_id=1379598192]
+visible = false
+
+[node name="SeparationBox" parent="." index="5" unique_id=864877799]
+visible = false
+scale = Vector2(3.9600003, 3.9600003)

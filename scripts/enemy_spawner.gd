@@ -48,6 +48,7 @@ func _ready() -> void:
 		#available_scenes.append(load("uid://cr74oa801on3x")) # Lizard
 		available_scenes.append(load("uid://brpqs6g30un30")) # Warrior
 		available_scenes.append(load("uid://d2qb70k4d8mv2")) # Wisp
+		available_scenes.append(load("uid://befl5kw4dom0v")) # Slime
 
 	# Initialize spawn cards by peeking into scenes
 	for scene in available_scenes:
